@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 
+
 const ProductCard = ({ image, title, price, rating, reviews }) => {
   return (
     <div className="flex flex-col grow pb-6 w-full rounded-2xl border border-solid bg-gradient-to-r from-black via-green-800 to-black border-green-900 shadow-lg">

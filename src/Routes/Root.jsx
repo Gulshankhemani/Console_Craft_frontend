@@ -1,12 +1,11 @@
 import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom"
-import Headers from "../Components/Header"
-import Home from "../Components/Home"
+import Headers from "../Section/Header.jsx"
+import Home from "../Section/Home.jsx"
 import Language from "../Pages/Language"
 import Login from "../Pages/Login"
 import Return_order from "../Pages/Return_order"
 import PropTypes from "prop-types"
 
-// A reusable Page_Component layout that wraps pages with Headers
 const Page_Component = ({ children }) => {
   return (
     <div>
@@ -17,7 +16,7 @@ const Page_Component = ({ children }) => {
 }
 
 
-// Define routes
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -69,5 +68,4 @@ Page_Component.propTypes = {
   children: PropTypes.node,
 }
 
-export default router
-
+export default router 

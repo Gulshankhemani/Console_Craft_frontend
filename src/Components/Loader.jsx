@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 
 const Loader = () => {
-  const [showText, setShowText] = useState(false); // This is used to toggle additional text
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -25,7 +24,6 @@ const Loader = () => {
     }, intervalDuration);
 
     const timer = setTimeout(() => {
-      setShowText(true); // Show text after the animation
     }, animationDuration);
 
     return () => {
@@ -48,18 +46,11 @@ const Loader = () => {
             className="animate-draw-triangle"
           />
         </svg>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-6xl font-bold text-green-500 opacity-0 animate-fade-in py-2">CC</span>
-        </div>
+      =
       </div>
       <div className="text-green-500 text-2xl font-bold animate-pulse">
         {progress}%
       </div>
-      {showText && (
-        <div className="mt-4 text-white text-xl">
-          Welcome to Cypher Club!
-        </div>
-      )}
     </div>
   );
 };
