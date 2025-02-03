@@ -26,7 +26,7 @@ const Header = () => {
           loading="lazy"
           src={logo || "/placeholder.svg"}
           alt="Logo"
-          className="object-contain shrink-0 bg-blend-normal aspect-auto w-[170px] my-auto hover:brightness-75"
+          className="object-contain shrink-0 bg-blend-normal aspect-auto w-[170px] my-auto hover:brightness-75  hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 hover:scale-105 transform transition-transform duration-200 ease-in-out"
         />
       </Link>
 
@@ -64,7 +64,7 @@ const Header = () => {
             className="object-contain shrink-0 self-start mt-1 w-10 rounded-none aspect-[1.48]"
           />
           <Link to="/language" className="hover:text-green-400">
-            <button className="flex items-center py-2 focus:outline-none hover:text-green-400">
+            <button className="flex items-center py-2 focus:outline-none hover:text-green-400 ">
               <span>English</span>
               <img
                 loading="lazy"

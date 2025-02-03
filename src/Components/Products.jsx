@@ -115,7 +115,8 @@ const Products = () => {
                       &#8250; {/* Right Arrow */}
                     </button>
                   </div>
-                  <div className="flex flex-col grow shrink self-stretch my-auto h-[475px] min-w-[240px] w-[500px] max-md:max-w-full  p-5">
+                  <div className="relative flex flex-col grow shrink self-stretch my-auto h-[475px] min-w-[240px] w-[500px] max-md:max-w-full  p-5">
+                    
                     <h1 className="self-start text-4xl font-black leading-relaxed text-center text-green-300 hover:text-green-400 ">
                       {currentGameIndex === 0 && "GTA"}
                       {currentGameIndex === 1 && "Resident Evil"}
@@ -136,7 +137,11 @@ const Products = () => {
                 </div>
                 <div>
                   <div className="flex justify-center mt-5">
-                    <Button name="Scroll Down For Your Dream" isBeam containerclass="w-auto" />
+                    <Button
+                      name="Scroll Down For Your Dream"
+                      isBeam
+                      containerclass="w-auto"
+                    />
                   </div>
                 </div>
                 <div className="mt-8 max-md:max-w-full">
@@ -160,4 +165,4 @@ const Products = () => {
   );
 };
 
-export default Products; 
+export default Products;

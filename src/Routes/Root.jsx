@@ -1,10 +1,11 @@
 import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom"
 import Headers from "../Section/Header.jsx"
 import Home from "../Section/Home.jsx"
-import Language from "../Pages/Language"
-import Login from "../Pages/Login"
-import Return_order from "../Pages/Return_order"
+import Language from "../NavPages/Language.jsx"
+import Login from "../NavPages/Login.jsx"
+import Return_order from "../NavPages/Return_order.jsx"
 import PropTypes from "prop-types"
+import Signin from "../Components/Signin.jsx"
 
 const Page_Component = ({ children }) => {
   return (
@@ -29,14 +30,6 @@ const router = createBrowserRouter(
         }
         />
       <Route
-        path="/home"
-        element={
-          <Page_Component>
-            <Home />
-          </Page_Component>
-        }
-        />
-      <Route
         path="/language"
         element={
           <Page_Component>
@@ -46,11 +39,7 @@ const router = createBrowserRouter(
         />
       <Route
         path="/login"
-        element={
-          <Page_Component>
-            <Login />
-          </Page_Component>
-        }
+        element={<Login />}
         />
       <Route
         path="/return-order"
@@ -58,6 +47,12 @@ const router = createBrowserRouter(
           <Page_Component>
             <Return_order />
           </Page_Component>
+        }
+        />
+      <Route
+        path="/signin"
+        element={
+            <Signin />
         }
         />
     </>,
@@ -69,3 +64,6 @@ Page_Component.propTypes = {
 }
 
 export default router 
+
+
+// component folder ui sorting
