@@ -6,7 +6,7 @@ const Signin = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-black p-6 relative">
       <div className="flex flex-col items-center justify-center min-h-screen bg-black p-6 relative">
-        <form className="w-full max-w-md p-8 bg-black bg-opacity-80 border border-green-500 rounded-2xl shadow-lg relative z-10 min-h-[500px]">
+        <form className="w-full max-w-md p-6 bg-black bg-opacity-80 border border-green-500 rounded-2xl shadow-lg relative z-10 min-h-[500px]">
           <h2 className="text-3xl font-bold text-green-500 text-start mb-8">
             Create account
           </h2>

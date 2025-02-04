@@ -6,12 +6,14 @@ import Login from "../NavPages/Login.jsx"
 import Return_order from "../NavPages/Return_order.jsx"
 import PropTypes from "prop-types"
 import Signin from "../Components/Signin.jsx"
+import Footer from "../Section/Footer.jsx"
 
 const Page_Component = ({ children }) => {
   return (
     <div>
       <Headers />
       <div>{children}</div>
+      <Footer />
     </div>
   )
 }
