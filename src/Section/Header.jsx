@@ -7,7 +7,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 const Header = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  
+
   const openSidebar = () => setSidebarOpen(true);
   const closeSidebar = () => setSidebarOpen(false);
 
@@ -43,13 +43,25 @@ const Header = () => {
 
       {/* Sidebar */}
       <Sidebar sidebarOpen={sidebarOpen} closeSidebar={closeSidebar} />
-      <div className={`fixed inset-0 bg-black bg-opacity-50 z-40 ${sidebarOpen ? "block" : "hidden"}`} onClick={closeSidebar}></div>
+      <div
+        className={`fixed inset-0 bg-black bg-opacity-50 z-40 ${
+          sidebarOpen ? "block" : "hidden"
+        }`}
+        onClick={closeSidebar}
+      ></div>
 
       {/* Profile & Options (Hidden on Mobile, Shown in Sidebar) */}
       <div className="hidden md:flex items-center gap-6 text-green-300">
-        <Link to="/return-order" className="hover:text-green-400">Return & Order</Link>
-        <Link to="/language" className="hover:text-green-400">English</Link>
-        <Link to="/login" className="flex items-center gap-2 hover:text-green-400">
+        <Link to="/return-order" className="hover:text-green-400">
+          Return & Order
+        </Link>
+        <Link to="/language" className="hover:text-green-400">
+          English
+        </Link>
+        <Link
+          to="/login"
+          className="flex items-center gap-2 hover:text-green-400"
+        >
           <LoginIcon className="w-6 h-6" />
           <span className="text-sm font-bold">Login</span>
         </Link>
