@@ -1,12 +1,16 @@
-import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom"
-import Headers from "../Section/Header.jsx"
-import Home from "../Section/Home.jsx"
-import Language from "../NavPages/Language.jsx"
-import Login from "../NavPages/Login.jsx"
-import Return_order from "../NavPages/Return_order.jsx"
-import PropTypes from "prop-types"
-import Signin from "../Components/Signin.jsx"
-import Footer from "../Section/Footer.jsx"
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+} from "react-router-dom";
+import Headers from "../Section/Header.jsx";
+import Home from "../Section/Home.jsx";
+import Language from "../NavPages/Language.jsx";
+import Login from "../NavPages/Login.jsx";
+import Return_order from "../NavPages/Return_order.jsx";
+import PropTypes from "prop-types";
+import Signin from "../Components/Signin.jsx";
+import Footer from "../Section/Footer.jsx";
 
 const Page_Component = ({ children }) => {
   return (
@@ -15,10 +19,8 @@ const Page_Component = ({ children }) => {
       <div>{children}</div>
       <Footer />
     </div>
-  )
-}
-
-
+  );
+};
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,7 +32,7 @@ const router = createBrowserRouter(
             <Home />
           </Page_Component>
         }
-        />
+      />
       <Route
         path="/language"
         element={
@@ -38,34 +40,18 @@ const router = createBrowserRouter(
             <Language />
           </Page_Component>
         }
-        />
-      <Route
-        path="/login"
-        element={<Login />}
-        />
-      <Route
-        path="/return-order"
-        element={
-          <Page_Component>
-            <Return_order />
-          </Page_Component>
-        }
-        />
-      <Route
-        path="/signin"
-        element={
-            <Signin />
-        }
-        />
-    </>,
-  ),
-)
+      />
+      <Route path="/login" element={<Login />} />
+      <Route path="/return-order" element={<Return_order />} />
+      <Route path="/signin" element={<Signin />} />
+    </>
+  )
+);
 
 Page_Component.propTypes = {
   children: PropTypes.node,
-}
+};
 
-export default router 
-
+export default router;
 
 // component folder ui sorting
