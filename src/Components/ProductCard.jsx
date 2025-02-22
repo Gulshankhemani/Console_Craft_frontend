@@ -1,4 +1,7 @@
 import PropTypes from "prop-types";
+import game1 from "../Assets/Game1/game1.jpg";
+// import game2 from "../Assets/Game2/game2.jpg";
+// import game3 from "../Assets/Game3/game3.jpg";
 
 
 const ProductCard = ({ image, title, price, rating, reviews }) => {
@@ -7,7 +10,7 @@ const ProductCard = ({ image, title, price, rating, reviews }) => {
       <div className="flex relative flex-col justify-center px-3.5 py-36 w-full rounded-none aspect-[1.139] max-md:py-24">
         <img
           loading="lazy"
-          src={image}
+          src={game1}
           alt={title}
           className="object-cover absolute inset-0 size-full"
         />

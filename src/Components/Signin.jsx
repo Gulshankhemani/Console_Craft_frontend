@@ -1,8 +1,58 @@
-import React, { useRef, useMemo } from "react";
+import React, { useRef, useMemo, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Link } from "react-router-dom";
+import axios from "axios";
+
 
 const Signin = () => {
+
+  const [formData, setFormData] = useState({
+    Fullname: "",
+    Username: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (event) => {
+    const { name, value, type, files } = event.target;
+
+    setFormData((prevState) => ({
+        ...prevState,
+        [name]: type === "file" ? files[0] : value, // Store file object
+    }));
+
+    console.log(`${name}:`, type === "file" ? files[0].name : value);
+};
+
+
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  const formDataToSend = new FormData();
+
+  // Append text fields
+  formDataToSend.append("Username", formData.Username);
+  formDataToSend.append("Fullname", formData.Fullname);
+  formDataToSend.append("email", formData.email);
+  formDataToSend.append("password", formData.password);
+
+  // Append files (if selected)
+  if (formData.avatar) formDataToSend.append("avatar", formData.avatar);
+  if (formData.coverImage) formDataToSend.append("coverImage", formData.coverImage);
+
+  try {
+      const response = await fetch("/register", {
+          method: "POST",
+          body: formDataToSend,
+      });
+      const data = await response.json();
+      console.log("Response:", data);
+  } catch (error) {
+      console.error("Error:", error);
+  }
+};
+
+  
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-black p-6 relative">
       <div className="flex flex-col items-center justify-center min-h-screen bg-black p-6 relative">
@@ -15,37 +65,41 @@ const Signin = () => {
               <label className="block text-sm font-medium text-green-400">Name</label>
               <input
                 type="text"
-                name="FirstName"
+                onChange={handleChange}
+                name="Fullname"
                 placeholder="First and last name"
-                className="shadow-[0_1px_0_rgba(255,255,255,0.5),0_1px_0_rgba(0,0,0,0.07)_inset] w-full box-border border p-2 rounded-[10px] border-t-[#949494] border-solid border-[#a6a6a6] text-green-300"
+                className="bg-gray-900 shadow-[0_1px_0_rgba(255,255,255,0.5),0_1px_0_rgba(0,0,0,0.07)_inset] w-full box-border border p-2 rounded-[10px] border-t-[#949494] border-solid border-[#a6a6a6] text-green-300"
                 required
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-green-400">UserName</label>
               <input
-                name="description"
+                name="Username"
+                onChange={handleChange}
                 placeholder="First and last name"
-                className="shadow-[0_1px_0_rgba(255,255,255,0.5),0_1px_0_rgba(0,0,0,0.07)_inset] w-full box-border border p-2 rounded-[10px] border-t-[#949494] border-solid border-[#a6a6a6] text-green-300"
+                className="bg-gray-900 shadow-[0_1px_0_rgba(255,255,255,0.5),0_1px_0_rgba(0,0,0,0.07)_inset] w-full box-border border p-2 rounded-[10px] border-t-[#949494] border-solid border-[#a6a6a6] text-green-300"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-green-400">Mobile number or email</label>
+              <label className="block text-sm font-medium text-green-400">Enter Email Address</label>
               <input
                 type="email"
                 id="email"
+                onChange={handleChange}
                 name="email"
                 aria-label="First and last name"
-                className="shadow-[0_1px_0_rgba(255,255,255,0.5),0_1px_0_rgba(0,0,0,0.07)_inset] w-full box-border border p-2 rounded-[10px] border-t-[#949494] border-solid border-[#a6a6a6] text-green-300"
+                className="bg-gray-900 shadow-[0_1px_0_rgba(255,255,255,0.5),0_1px_0_rgba(0,0,0,0.07)_inset] w-full box-border border p-2 rounded-[10px] border-t-[#949494] border-solid border-[#a6a6a6] text-green-300"
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-green-400">Password</label>
               <input
                 type="text"
-                name="teamMembers"
-                className="shadow-[0_1px_0_rgba(255,255,255,0.5),0_1px_0_rgba(0,0,0,0.07)_inset] w-full box-border border p-2 rounded-[10px] border-t-[#949494] border-solid border-[#a6a6a6] text-green-300"
+                name="password"
+                onChange={handleChange}
+                className="bg-gray-900 shadow-[0_1px_0_rgba(255,255,255,0.5),0_1px_0_rgba(0,0,0,0.07)_inset] w-full box-border border p-2 rounded-[10px] border-t-[#949494] border-solid border-[#a6a6a6] text-green-300"
                 placeholder="At Least 6 characters"
                 required
               />
@@ -55,6 +109,8 @@ const Signin = () => {
             </div>
             <button
               type="submit"
+              onSubmit={handleSubmit}
+
               className="font-['Amazon_Ember',_Arial,_sans-serif] opacity-100 w-full p-2 text-white bg-green-600 rounded-[10px] hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 hover:scale-105 transform transition-transform duration-200 ease-in-out overflow-visible "
             >
               Continue
@@ -164,7 +220,7 @@ const Particles = () => {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.03}
+        size={0.04}
         color="#3aa14e"
         transparent
         opacity={0.6}

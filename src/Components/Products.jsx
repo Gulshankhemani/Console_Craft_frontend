@@ -84,13 +84,13 @@ const Products = () => {
   ];
 
   return (
-    <div className="flex overflow-hidden flex-col bg-gradient-to-r from-black via-green-800 to-black w-full">
+    <div className="flex overflow-hidden flex-col bg-gradient-to-r from-gray-900 via-purple-700 to-cyan-400 w-full">
       <div className="w-full">
         <div className="flex gap-5 max-md:flex-col">
           <div className="flex flex-col ml-5 w-full max-md:ml-0 max-md:w-full">
             <div className="flex flex-col w-full">
               <div className="flex flex-col px-7 mt-5 w-full max-md:px-5">
-                <h1 className="self-start text-3xl font-bold tracking-normal text-green-300 hover:text-green-400">
+                <h1 className="self-start text-3xl font-bold tracking-normal text-gray-200 hover:text-purple-600">
                   Popular
                 </h1>
                 <div className="relative flex flex-wrap gap-10 items-center pr-10 max-md:pr-5 mt-6">
@@ -104,20 +104,20 @@ const Products = () => {
                     {/* Navigation Buttons */}
                     <button
                       onClick={prevSlide}
-                      className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-green-400 text-black rounded-full p-5 text-2xl opacity-70 hover:opacity-100"
+                      className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-purple-600 text-gray-200 rounded-full p-5 text-2xl opacity-70 hover:opacity-100"
                     >
                       &#8249; {/* Left Arrow */}
                     </button>
                     <button
                       onClick={nextSlide}
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-green-400 text-black rounded-full p-5 text-2xl opacity-70 hover:opacity-100"
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-purple-600 text-gray-200 rounded-full p-5 text-2xl opacity-70 hover:opacity-100"
                     >
                       &#8250; {/* Right Arrow */}
                     </button>
                   </div>
                   <div className="relative flex flex-col grow shrink self-stretch my-auto h-[475px] min-w-[240px] w-[500px] max-md:max-w-full  p-5">
                     
-                    <h1 className="self-start text-4xl font-black leading-relaxed text-center text-green-300 hover:text-green-400 ">
+                    <h1 className="self-start text-4xl font-black leading-relaxed text-center text-gray-900 hover:text-purple-600 ">
                       {currentGameIndex === 0 && "GTA"}
                       {currentGameIndex === 1 && "Resident Evil"}
                       {currentGameIndex === 2 && "Minecraft"}
@@ -136,13 +136,6 @@ const Products = () => {
                   </div>
                 </div>
                 <div>
-                  <div className="flex justify-center mt-5">
-                    <Button
-                      name="Scroll Down For Your Dream"
-                      isBeam
-                      containerclass="w-auto"
-                    />
-                  </div>
                 </div>
                 <div className="mt-8 max-md:max-w-full">
                   <div className="flex gap-5 max-md:flex-col">

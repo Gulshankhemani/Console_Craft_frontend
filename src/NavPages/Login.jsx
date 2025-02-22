@@ -1,8 +1,11 @@
 import React, { useRef, useMemo } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
+
+  
   return (
     <div className="flex items-center justify-center min-h-screen bg-black p-6 relative">
       <div className="flex flex-col items-center justify-center min-h-screen bg-black p-6 relative">
@@ -58,7 +61,7 @@ const Login = () => {
           </h5>
           <Link
             to="/Signin"
-            className="block w-full max-w-xs py-3 px-7 text-lg font-semibold text-white bg-green-600 rounded-[10px] hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 hover:scale-105 transform transition-transform duration-200 ease-in-out text-center my-2.5"
+            className="block w-full max-w-xs py-3  px-5 text-lg font-semibold text-white bg-green-600 rounded-[10px] hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 hover:scale-105 transform transition-transform duration-200 ease-in-out text-center my-2.5"
           >
             Create your ConsoleCraft account
           </Link>
@@ -146,7 +149,7 @@ const Particles = () => {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.03}
+        size={0.04}
         color="#3aa14e"
         transparent
         opacity={0.6}

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -11,12 +12,24 @@ import Return_order from "../NavPages/Return_order.jsx";
 import PropTypes from "prop-types";
 import Signin from "../Components/Signin.jsx";
 import Footer from "../Section/Footer.jsx";
+import Loader from "../Components/Loader.jsx";
 
 const Page_Component = ({ children }) => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      localStorage.setItem("hasLoadedBefore", "true");
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div>
       <Headers />
-      <div>{children}</div>
+      {isLoading ? <Loader /> : <div>{children}</div>}
       <Footer />
     </div>
   );
@@ -53,5 +66,3 @@ Page_Component.propTypes = {
 };
 
 export default router;
-
-// component folder ui sorting

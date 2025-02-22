@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import logo from "../Assets/logo.png";
 
 const Loader = () => {
   const [progress, setProgress] = useState(0);
