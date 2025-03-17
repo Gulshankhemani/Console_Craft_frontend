@@ -3,66 +3,73 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-
 const Signin = () => {
-
   const [formData, setFormData] = useState({
     Fullname: "",
     Username: "",
     email: "",
     password: "",
+    avatar: null,
+    coverImage: null,
   });
 
   const handleChange = (event) => {
     const { name, value, type, files } = event.target;
 
     setFormData((prevState) => ({
-        ...prevState,
-        [name]: type === "file" ? files[0] : value, // Store file object
+      ...prevState,
+      [name]: type === "file" ? files[0] : value,
     }));
 
     console.log(`${name}:`, type === "file" ? files[0].name : value);
-};
+  };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formDataToSend = new FormData();
 
-const handleSubmit = async (event) => {
-  event.preventDefault();
-  const formDataToSend = new FormData();
+    // Append text fields
+    formDataToSend.append("Username", formData.Username);
+    formDataToSend.append("Fullname", formData.Fullname);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("password", formData.password);
 
-  // Append text fields
-  formDataToSend.append("Username", formData.Username);
-  formDataToSend.append("Fullname", formData.Fullname);
-  formDataToSend.append("email", formData.email);
-  formDataToSend.append("password", formData.password);
+    // Append files (if selected)
+    if (formData.avatar) formDataToSend.append("avatar", formData.avatar);
+    if (formData.coverImage)
+      formDataToSend.append("coverImage", formData.coverImage);
 
-  // Append files (if selected)
-  if (formData.avatar) formDataToSend.append("avatar", formData.avatar);
-  if (formData.coverImage) formDataToSend.append("coverImage", formData.coverImage);
-
-  try {
-      const response = await fetch("/register", {
-          method: "POST",
-          body: formDataToSend,
-      });
-      const data = await response.json();
-      console.log("Response:", data);
-  } catch (error) {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/users/register",
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("Response:", response.data);
+    } catch (error) {
       console.error("Error:", error);
-  }
-};
-
-  
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-black p-6 relative">
       <div className="flex flex-col items-center justify-center min-h-screen bg-black p-6 relative">
-        <form className="w-full max-w-md p-6 bg-black bg-opacity-80 border border-green-500 rounded-2xl shadow-lg relative z-10 min-h-[500px]">
+        <form
+          onSubmit={handleSubmit}
+          className="w-full max-w-md p-6 bg-black bg-opacity-80 border border-green-500 rounded-2xl shadow-lg relative z-10 min-h-[500px]"
+        >
           <h2 className="text-3xl font-bold text-green-500 text-start mb-8">
             Create account
           </h2>
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-green-400">Name</label>
+              <label className="block text-sm font-medium text-green-400">
+                Name
+              </label>
               <input
                 type="text"
                 onChange={handleChange}
@@ -73,7 +80,9 @@ const handleSubmit = async (event) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-green-400">UserName</label>
+              <label className="block text-sm font-medium text-green-400">
+                UserName
+              </label>
               <input
                 name="Username"
                 onChange={handleChange}
@@ -83,7 +92,9 @@ const handleSubmit = async (event) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-green-400">Enter Email Address</label>
+              <label className="block text-sm font-medium text-green-400">
+                Enter Email Address
+              </label>
               <input
                 type="email"
                 id="email"
@@ -94,7 +105,9 @@ const handleSubmit = async (event) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-green-400">Password</label>
+              <label className="block text-sm font-medium text-green-400">
+                Password
+              </label>
               <input
                 type="text"
                 name="password"
@@ -107,11 +120,33 @@ const handleSubmit = async (event) => {
                 Passwords must be at least 6 characters
               </p>
             </div>
+            <div>
+              <label className="block text-sm font-medium text-green-400">
+                Upload Avatar
+              </label>
+              <input
+                type="file"
+                name="avatar"
+                onChange={handleChange}
+                className="bg-gray-900 w-full text-green-300"
+                accept="image/*"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-green-400">
+                Upload Cover Image
+              </label>
+              <input
+                type="file"
+                name="coverImage"
+                onChange={handleChange}
+                className="bg-gray-900 w-full text-green-300"
+                accept="image/*"
+              />
+            </div>
             <button
               type="submit"
-              onSubmit={handleSubmit}
-
-              className="font-['Amazon_Ember',_Arial,_sans-serif] opacity-100 w-full p-2 text-white bg-green-600 rounded-[10px] hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 hover:scale-105 transform transition-transform duration-200 ease-in-out overflow-visible "
+              className="font-['Amazon_Ember',_Arial,_sans-serif] opacity-100 w-full p-2 text-white bg-green-600 rounded-[10px] hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 hover:scale-105 transform transition-transform duration-200 ease-in-out overflow-visible"
             >
               Continue
             </button>
@@ -130,9 +165,7 @@ const handleSubmit = async (event) => {
               <p>
                 Already have an account?{""}
                 <Link to="/login">
-                  <a href="#" className="text-white text-[13px] ml-2.5">
-                    Sign in
-                  </a>
+                  <span className="text-white text-[13px] ml-2.5">Sign in</span>
                 </Link>
               </p>
             </div>

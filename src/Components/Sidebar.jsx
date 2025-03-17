@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 const Sidebar = ({ sidebarOpen, closeSidebar }) => {
   const menuItems = [
     "Dashboard",
-    "Products",
+    "Hero",
     "Favorites",
     "Inbox",
     "Order Lists",

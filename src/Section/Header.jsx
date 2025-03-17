@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Sidebar from "../Components/Sidebar.jsx";
-import LoginIcon from "@mui/icons-material/Login";
 import logo from "../Assets/logo.png";
 import { Link } from "react-router-dom";
 import Button from "../Components/Button.jsx";
@@ -18,10 +17,10 @@ const Header = () => {
   };
 
   return (
-    <div className="flex flex-wrap gap-10 py-3 pr-8 pl-20 w-full bg-gradient-to-r from-gray-900 via-purple-700 to-cyan-400 max-md:px-5 max-md:max-w-full">
+    <div className="flex flex-wrap gap-10 py-3 pr-8 pl-20 w-full bg-transparent max-md:px-5 max-md:max-w-full">
       {/* Hamburger Menu */}
       <button
-        className="text-gray-200 text-2xl my-auto focus:outline-none hover:scale-105 p-2 rounded-md transition-all duration-200"
+        className="text-gray-900 text-2xl my-auto focus:outline-none hover:scale-105 p-2 rounded-md transition-all duration-200"
         onClick={openSidebar}
       >
         ☰
@@ -69,15 +68,9 @@ const Header = () => {
       {/* Profile & Language */}
       <div className="flex flex-1 gap-10 justify-center  items-center">
         <div className="flex gap-3 text-sm font-semibold text-gray-900 items-center">
-          <img
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/a5f5e84c8782739c3018aaf219371a03a62d1f22319639f2440ce89d5a801b2d?placeholderIfAbsent=true&apiKey=3a9eed2ab9b94807b0368b782b883ee2"
-            alt="Language selector"
-            className="w-10 object-contain aspect-[1.48]"
-          />
           <Link to="/language">
             <button className="flex items-center py-2 focus:outline-none hover:text-purple-600">
-              <span className="text-lg">ENGLISH</span>
+              <span className="text-sm">ENGLISH</span>
               <img
                 loading="lazy"
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/f53b92479fa941bc5167c5f9ba429fa60c12bb10b7a6bfb5d2c0b4a8d5dfa936?placeholderIfAbsent=true&apiKey=3a9eed2ab9b94807b0368b782b883ee2"
@@ -90,7 +83,7 @@ const Header = () => {
         <div className="flex gap-3 text-sm font-semibold text-gray-900 items-center">
           <Link to="/return-order" className="hover:text-purple-600">
             <button className="flex items-center focus:outline-none hover:text-purple-600">
-              <span className="text-lg">Return & Order</span>
+              <span className="text-sm">Return & Order</span>
             </button>
           </Link>
         </div>
@@ -99,7 +92,6 @@ const Header = () => {
             to="/login"
             className="flex items-center gap-3 hover:text-purple-600"
           >
-            <LoginIcon className="w-11 object-contain shrink-0" />
             <Button
               name="login"
               containerclass="min-w-[120px] px-4 py-2 text-center"
