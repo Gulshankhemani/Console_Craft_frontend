@@ -1,17 +1,11 @@
 import Hero from "../Components/Hero.jsx";
-import ProductCard from "../Components/ProductCard.jsx";
+import Overview from "../Components/Overview.jsx";
 
 const Home = () => {
   return (
     <div>
       <Hero />
-      <ProductCard
-        image="path/to/image.jpg"
-        title="Sample Game"
-        price={59.99}
-        rating={4}
-        reviews={120}
-      />
+      <Overview/>
     </div>
   );
 };
