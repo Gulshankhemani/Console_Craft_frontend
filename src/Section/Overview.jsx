@@ -1,6 +1,7 @@
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
+import AnimatedTitle from "../Components/AnimatedTitle";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,13 +28,13 @@ const Overview = () => {
   return (
     <div id="about" className="min-h-screen w-screen ">
       <div className="relative mb-8 mt-36 flex flex-col items-center gap-5">
-        <h2 className="font-general text-sm uppercase md:text-[10px]">
+        <p className="font-general text-sm uppercase md:text-[10px]">
           welcome to Console-Craft
-        </h2>
-        <div className="mt-5 text-center text-4xl uppercase leading-[0.8] md:text-[6rem]">
-          Find the <b>G</b>ame <br /> of your <b>D</b>ream <br /> make it to{" "}
-          <b>R</b>eality
-        </div>
+        </p>
+        <AnimatedTitle
+          title="Find the <b>G</b>ame  <br /> of your <b>D</b>ream <br /> make it to <b>R</b>eality"
+          containerClass="mt-5 !text-black text-center"
+        />
         <div className="about-subtext">
           <p>Unleash Your Gaming Passion—Consoles, PCs, and More Await</p>
           <p className="text-gray-500">

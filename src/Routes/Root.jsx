@@ -5,7 +5,8 @@ import {
   Route,
 } from "react-router-dom";
 import Headers from "../Section/Header.jsx";
-import Home from "../Section/Home.jsx";
+import Hero from "../Section/Hero.jsx";
+import Overview from "../Section/Overview.jsx";
 import Language from "../NavPages/Language.jsx";
 import Login from "../NavPages/Login.jsx";
 import Return_order from "../NavPages/Return_order.jsx";
@@ -42,7 +43,8 @@ const router = createBrowserRouter(
         path="/"
         element={
           <Page_Component>
-            <Home />
+            <Hero />
+            <Overview />
           </Page_Component>
         }
       />

@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
 import axios from "axios";
+import VideoPreview from "../Components/VideoPreview";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -51,8 +52,7 @@ const Hero = () => {
 
   useGSAP(
     () => {
-      if (hasClicked && totalVideos > 0 && nextVideoRef.current) {
-        console.log("Starting GSAP animation for next video");
+      if (hasClicked) {
         gsap.set("#next-video", { visibility: "visible" });
         gsap.to("#next-video", {
           transformOrigin: "center center",
@@ -61,14 +61,7 @@ const Hero = () => {
           height: "100%",
           duration: 1,
           ease: "power1.inOut",
-          onStart: () => {
-            if (nextVideoRef.current) {
-              console.log("Playing next video");
-              nextVideoRef.current
-                .play()
-                .catch((err) => console.error("Next video play error:", err));
-            }
-          },
+          onStart: () => nextVideoRef.current.play(),
         });
         gsap.from("#current-video", {
           transformOrigin: "center center",
@@ -78,37 +71,29 @@ const Hero = () => {
         });
       }
     },
-    { dependencies: [currentIndex, videos], revertOnUpdate: true }
+    {
+      dependencies: [currentIndex],
+      revertOnUpdate: true,
+    }
   );
 
   useGSAP(() => {
-    if (totalVideos > 0) {
-      console.log("Starting GSAP animation for video frame");
-      gsap.set("#video-frame", {
-        clipPath: "polygon(14% 0, 72% 0, 88% 90%, 0 95%)",
-        borderRadius: "0% 0% 40% 10%",
-      });
-      gsap.from("#video-frame", {
-        clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-        borderRadius: "0% 0% 0% 0%",
-        ease: "power1.inOut",
-        scrollTrigger: {
-          trigger: "#video-frame",
-          start: "center center",
-          end: "bottom center",
-          scrub: true,
-        },
-      });
-    }
-  }, [totalVideos]);
-
-  if (isLoading) {
-    return <div>Loading videos...</div>;
-  }
-
-  if (totalVideos === 0) {
-    return <div>No videos available</div>;
-  }
+    gsap.set("#video-frame", {
+      clipPath: "polygon(14% 0, 72% 0, 88% 90%, 0 95%)",
+      borderRadius: "0% 0% 40% 10%",
+    });
+    gsap.from("#video-frame", {
+      clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+      borderRadius: "0% 0% 0% 0%",
+      ease: "power1.inOut",
+      scrollTrigger: {
+        trigger: "#video-frame",
+        start: "center center",
+        end: "bottom center",
+        scrub: true,
+      },
+    });
+  });
 
   return (
     <div className="relative h-dvh w-screen overflow-x-hidden">
@@ -118,6 +103,7 @@ const Hero = () => {
       >
         <div>
           <div className="mask-clip-path absolute absolute-center z-50 size-64 cursor-pointer overflow-hidden rounded-lg">
+            <VideoPreview>
             <div
               onClick={handleMiniVdClick}
               className="origin-center scale-50 opacity-0 transition-all duration-500 ease-in hover:scale-100 hover:opacity-100"
@@ -145,6 +131,7 @@ const Hero = () => {
                 }
               />
             </div>
+            </VideoPreview>
           </div>
           <video
             ref={nextVideoRef}
