@@ -1,7 +1,6 @@
 import React, { useRef, useMemo } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Link } from "react-router-dom";
-import axios from "axios";
 
 const Login = () => {
 

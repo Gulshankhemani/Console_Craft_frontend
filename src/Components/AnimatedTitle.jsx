@@ -15,7 +15,7 @@ const AnimatedTitle = ({ title, containerClass }) => {
           trigger: containerRef.current,
           start: "100 bottom",
           end: "center bottom",
-          toggleActions: "play none none reverse",
+          toggleActions: "play none none reverse", // this is to make the animation play only once this is in the format of [onEnter , onLeave , onEnterBack , onLeaveBack]
         },
       });
 

@@ -1,4 +1,4 @@
-const Language = () => {
+const Gift_Card = () => {
   return (
     <div>
       Hello 
@@ -6,4 +6,4 @@ const Language = () => {
   )
 }
 
-export default Language
+export default Gift_Card

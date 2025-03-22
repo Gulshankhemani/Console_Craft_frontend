@@ -4,16 +4,16 @@ import {
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
-import Headers from "../Section/Header.jsx";
+import Navbars from "../Section/Navbar.jsx";
 import Hero from "../Section/Hero.jsx";
 import Overview from "../Section/Overview.jsx";
-import Language from "../NavPages/Language.jsx";
 import Login from "../NavPages/Login.jsx";
-import Return_order from "../NavPages/Return_order.jsx";
-import PropTypes from "prop-types";
+import Deals from "../NavPages/Deals.jsx";
 import Signin from "../Components/Signin.jsx";
 import Footer from "../Section/Footer.jsx";
 import Loader from "../Components/Loader.jsx";
+import Contact from "../NavPages/Contact.jsx";
+import Gift_Card from "../NavPages/Gift_Card.jsx";
 
 const Page_Component = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -29,7 +29,7 @@ const Page_Component = ({ children }) => {
 
   return (
     <div>
-      <Headers />
+      <Navbars />
       {isLoading ? <Loader /> : <div>{children}</div>}
       <Footer />
     </div>
@@ -48,23 +48,13 @@ const router = createBrowserRouter(
           </Page_Component>
         }
       />
-      <Route
-        path="/language"
-        element={
-          <Page_Component>
-            <Language />
-          </Page_Component>
-        }
-      />
       <Route path="/login" element={<Login />} />
-      <Route path="/return-order" element={<Return_order />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/gift_card" element={<Gift_Card />} />
+      <Route path="/deals" element={<Deals />} />
       <Route path="/signin" element={<Signin />} />
     </>
   )
 );
-
-Page_Component.propTypes = {
-  children: PropTypes.node,
-};
 
 export default router;

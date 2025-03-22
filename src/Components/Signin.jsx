@@ -44,7 +44,7 @@ const Signin = () => {
         "http://localhost:8000/api/v1/users/register",
         formDataToSend,
         {
-          headers: {
+          Navbars: {
             "Content-Type": "multipart/form-data",
           },
         }
