@@ -7,7 +7,7 @@ import VideoPreview from "../Components/VideoPreview";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Hero = () => {
+const Hero = ({sectionTitle = "hero"}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hasClicked, setHasClicked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +21,7 @@ const Hero = () => {
         const response = await axios.get(
           "http://localhost:8000/api/v1/videos/",
           {
-            params: { page: 1, limit: 4 },
+            params: { title: sectionTitle, page: 1, limit: 4 },
           }
         );
 
@@ -40,7 +40,7 @@ const Hero = () => {
     };
 
     fetchVideos();
-  }, []);
+  }, [sectionTitle]);
 
   const totalVideos = videos.length;
   const upcomingVideoIndex = (currentIndex + 1) % totalVideos || 0;
