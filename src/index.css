@@ -294,54 +294,52 @@ body {
   
 
 
-.btn {
-    @apply flex items-center justify-center cursor-pointer p-3 
-           text-gray-900 mx-auto relative rounded-lg shadow-lg transition-all active:scale-95;
-    position: relative;
-    overflow: hidden;
-    background: #8f55ed; /* Default background color */
-}
-
-.btn::before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    width: calc(100% + 6px);
-    height: calc(100% + 6px);
-    left: -3px;
-    top: -3px;
-    border-radius: 12px;
-    background: inherit; /* Use the same gradient background */
-    background-size: 600%;
-    filter: blur(12px);
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-
-@keyframes glowing {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-.btn:hover {
-    background: linear-gradient(
+  @layer utilities {
+    .btn {
+      @apply flex items-center justify-center cursor-pointer p-3 
+             text-gray-900 mx-auto relative rounded-full shadow-lg transition-all duration-300 ease-in-out active:scale-95;
+      position: relative;
+      overflow: hidden;
+      @apply bg-blue-50; 
+      width: 120px;
+    }
+  
+    .btn::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      width: 100%; 
+      height: 100%;
+      left: 0;
+      top: 0;
+      border-radius: inherit; 
+      background: inherit; 
+      background-size: 600%;
+      filter: blur(8px); 
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+  
+    @keyframes glowing {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+  
+    .btn:hover {
+      background: linear-gradient(
         45deg,
-        #FF0000, #ff7300, #fffb00, #48ff00,
-        #00ffd5, #002bff, #ff00c8, #ff0000
-    );
-    background-size: 600%;
-    animation: glowing 10s linear infinite;
-}
-
-.btn:hover::before {
-    opacity: 1;
-}
-
-.btn-ping {
-    @apply animate-ping absolute inline-flex h-full w-full rounded-full bg-black opacity-75;
-}
-
-.btn-ping_dot {
-    @apply relative inline-flex rounded-full h-3 w-3 bg-green-800;
-}
+        #fff176, /* Light yellow */
+        #fdd835, /* Vibrant yellow */
+        #ffb300, /* Deep amber-yellow */
+        #ffca28  /* Golden yellow */
+      );
+      background-size: 600%;
+      animation: glowing 8s linear infinite; /* Slightly faster for energy */
+      @apply scale-105; /* Subtle scale-up on hover */
+    }
+  
+    .btn:hover::before {
+      opacity: 0.6; /* Lower opacity for a refined glow */
+    }
+  }
