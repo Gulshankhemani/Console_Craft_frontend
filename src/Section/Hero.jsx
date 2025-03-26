@@ -19,7 +19,7 @@ const Hero = ({sectionTitle = "hero"}) => {
       try {
         setIsLoading(true);
         const response = await axios.get(
-          "http://localhost:8000/api/v1/videos/",
+          "http://localhost:8000/api/v1/videos/getVideoByTitle",
           {
             params: { title: sectionTitle, page: 1, limit: 6 },
           }
