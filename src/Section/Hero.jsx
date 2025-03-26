@@ -21,7 +21,7 @@ const Hero = ({sectionTitle = "hero"}) => {
         const response = await axios.get(
           "http://localhost:8000/api/v1/videos/",
           {
-            params: { title: sectionTitle, page: 1, limit: 4 },
+            params: { title: sectionTitle, page: 1, limit: 6 },
           }
         );
 
