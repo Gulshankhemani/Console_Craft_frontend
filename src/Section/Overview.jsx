@@ -7,7 +7,7 @@ import axios from "axios";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Overview = ({ sectionTitle = "game" }) => {
+const Overview = ({ sectionTitle = "game5" }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [images, setImages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);

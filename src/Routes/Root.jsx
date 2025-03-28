@@ -14,6 +14,7 @@ import Footer from "../Section/Footer.jsx";
 import Loader from "../Components/Loader.jsx";
 import Contact from "../NavPages/Contact.jsx";
 import Gift_Card from "../NavPages/Gift_Card.jsx";
+import Feature from "../Section/Features.jsx";
 
 const Page_Component = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -45,6 +46,7 @@ const router = createBrowserRouter(
           <Page_Component>
             <Hero />
             <Overview />
+            <Feature />
           </Page_Component>
         }
       />
