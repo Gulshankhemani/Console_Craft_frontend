@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import logo from "../Assets/logo.png";
 
 const Loader = () => {
   const [progress, setProgress] = useState(0);
@@ -88,7 +87,6 @@ const Loader = () => {
             className="animate-draw-triangle"
           />
         </svg>
-        =
       </div>
       <div className="text-green-500 text-2xl font-bold animate-pulse">
         {progress}%
@@ -98,3 +96,4 @@ const Loader = () => {
 };
 
 export default Loader;
+
