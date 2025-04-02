@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-// BentoProductCard Component (unchanged)
 const BentoProductCard = ({
   imageUrl,
   title,
@@ -13,20 +12,20 @@ const BentoProductCard = ({
   isSponsored = false,
 }) => {
   return (
-    <div className="relative bg-black rounded-lg shadow-md overflow-hidden border-hsla">
+    <div className="relative bg-black rounded-lg shadow-md overflow-hidden border-hsla transition-transform transform hover:scale-105">
       <div className="relative flex flex-row items-start h-auto p-4">
         <Link to={`/product/${productId}`}>
           <div className="w-80 h-48 mr-12">
             <img
               src={imageUrl || "/images/fallback-product.jpg"}
               alt={title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover rounded-md"
             />
           </div>
         </Link>
         <div className="flex flex-col justify-start flex-1 space-y-2">
           <Link to={`/product/${productId}`}>
-            <h3 className="text-lg font-circular-web text-blue-50 special-font">
+            <h3 className="text-lg font-circular-web text-blue-50 special-font hover:text-blue-200">
               {title}
             </h3>
           </Link>
@@ -50,7 +49,7 @@ const BentoProductCard = ({
   );
 };
 
-const Playstation = ({ sectionTitle = "ps" }) => {
+const Playstation = ({ sectioncategory = "PlayStation" }) => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -67,9 +66,9 @@ const Playstation = ({ sectionTitle = "ps" }) => {
       try {
         setIsLoading(true);
         const response = await axios.get(
-          "http://localhost:8000/api/v1/image/getImageByTitle",
+          "http://localhost:8000/api/v1/image/getImageByCategory",
           {
-            params: { title: sectionTitle, page: 1, limit: 6 },
+            params: { category: sectioncategory, page: 1, limit: 10 },
           }
         );
 
@@ -80,7 +79,7 @@ const Playstation = ({ sectionTitle = "ps" }) => {
         const formattedProducts = fetchedProducts.map((item, index) => ({
           id: item._id || `product-${index}`,
           image: item.imageUrl,
-          name: item.name || `Product ${index + 1}`,
+          name: item.title || `Product ${index + 1}`,
           price: item.price || 0,
           rating: item.rating || 4.0,
           reviews: item.reviews || "0",
@@ -88,6 +87,7 @@ const Playstation = ({ sectionTitle = "ps" }) => {
           platform: item.platform || "",
           storage: item.storage || "",
           ram: item.ram || "",
+          isSponsored: item.isSponsored || false,
         }));
 
         setProducts(formattedProducts);
@@ -103,7 +103,7 @@ const Playstation = ({ sectionTitle = "ps" }) => {
     };
 
     fetchProducts();
-  }, [sectionTitle]);
+  }, [sectioncategory]);
 
   const handleFilterChange = (filterType, value) => {
     setFilters((prevFilters) => {
@@ -155,9 +155,9 @@ const Playstation = ({ sectionTitle = "ps" }) => {
   };
 
   return (
-    <div className="min-h-screen bg-black font-sans flex pb-52">
+    <div className="min-h-screen bg-black font-sans flex">
       {/* Filters Section (Fixed Sidebar) */}
-      <aside className="w-64 p-4 bg-black shadow-md overflow-y-auto border-hsla fixed top-0 left-0 h-screen">
+      <aside className="w-64 p-4 bg-black shadow-md overflow-y-auto border-hsla fixed top-20 left-0 h-[calc(100vh-5rem)]">
         <h2 className="text-xl font-bold mb-4 text-blue-50 font-circular-web">Filters</h2>
 
         <details open className="mb-4">
@@ -167,7 +167,7 @@ const Playstation = ({ sectionTitle = "ps" }) => {
               <label key={category} className="flex items-center">
                 <input
                   type="checkbox"
-                  className="mr-2"
+                  className="mr-2 accent-blue-50"
                   checked={filters.category.includes(category)}
                   onChange={() => handleFilterChange("category", category)}
                 />
@@ -188,7 +188,7 @@ const Playstation = ({ sectionTitle = "ps" }) => {
               onChange={(e) =>
                 handleFilterChange("priceRange", [0, parseInt(e.target.value)])
               }
-              className="w-full"
+              className="w-full accent-blue-50"
             />
             <div className="flex justify-between text-xs text-blue-50 opacity-50 font-circular-web">
               <span>₹0</span>
@@ -204,7 +204,7 @@ const Playstation = ({ sectionTitle = "ps" }) => {
               <label key={platform} className="flex items-center">
                 <input
                   type="checkbox"
-                  className="mr-2"
+                  className="mr-2 accent-blue-50"
                   checked={filters.platform.includes(platform)}
                   onChange={() => handleFilterChange("platform", platform)}
                 />
@@ -221,7 +221,7 @@ const Playstation = ({ sectionTitle = "ps" }) => {
               <label key={storage} className="flex items-center">
                 <input
                   type="checkbox"
-                  className="mr-2"
+                  className="mr-2 accent-blue-50"
                   checked={filters.storage.includes(storage)}
                   onChange={() => handleFilterChange("storage", storage)}
                 />
@@ -238,7 +238,7 @@ const Playstation = ({ sectionTitle = "ps" }) => {
               <label key={ram} className="flex items-center">
                 <input
                   type="checkbox"
-                  className="mr-2"
+                  className="mr-2 accent-blue-50"
                   checked={filters.ram.includes(ram)}
                   onChange={() => handleFilterChange("ram", ram)}
                 />
@@ -250,15 +250,15 @@ const Playstation = ({ sectionTitle = "ps" }) => {
       </aside>
 
       {/* Product Listing Section */}
-      <main className="flex-1 p-4 ml-64">
-        <h1 className="text-2xl bento-title special-font mb-4 text-blue-50">Ga<b>m</b>i<b>n</b>g Co<b>n</b>soles</h1>
+      <main className="flex-1 p-6 ml-64 mt-20">
+        <h1 className="text-3xl bento-title special-font mb-6 text-blue-50">Ga<b>m</b>i<b>n</b>g Co<b>n</b>soles</h1>
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-50"></div>
           </div>
         ) : (
           <div className="space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
+            <div className="grid grid-cols-1 gap-6">
               {filteredProducts.map((product) => (
                 <BentoProductCard
                   key={product.id}
@@ -268,6 +268,7 @@ const Playstation = ({ sectionTitle = "ps" }) => {
                   rating={product.rating}
                   reviews={product.reviews}
                   productId={product.id}
+                  isSponsored={product.isSponsored}
                   onAddToCart={handleAddToCart}
                 />
               ))}

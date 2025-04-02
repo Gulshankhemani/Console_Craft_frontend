@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const BentoTilt = ({ children, className = "" }) => {
   const [transformStyle, setTransformStyle] = useState("");
@@ -158,16 +159,16 @@ const Features = () => {
               isComingSoon
             />
           </BentoTilt>
-
           <BentoTilt className="bento-tilt_1 row-span-1 ms-32 md:col-span-1 md:ms-0">
+          <Link to = {"/playstation"}>
             <BentoCard
               videoUrl={videos[0]?.videoUrl}
               title={<>n<b>e</b>xus</>}
               description="A gamified social hub, adding a new dimension of play to social interaction for Web3 communities."
               isComingSoon
             />
+          </Link>
           </BentoTilt>
-
           <BentoTilt className="bento-tilt_1 me-14 md:col-span-1 md:me-0">
             <BentoCard
               videoUrl={videos[1]?.videoUrl}

@@ -7,7 +7,7 @@ import axios from "axios";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Overview = ({ sectionTitle = "game5" }) => {
+const Overview = ({ sectioncategory = "PC_Components" }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [images, setImages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -18,9 +18,9 @@ const Overview = ({ sectionTitle = "game5" }) => {
       try {
         setIsLoading(true);
         const response = await axios.get(
-          "http://localhost:8000/api/v1/image/getImageByTitle",
+          "http://localhost:8000/api/v1/image/getImageByCategory",
           {
-            params: { title: sectionTitle, page: 1, limit: 6 },
+            params: { category: sectioncategory, page: 1, limit: 6 },
           }
         );
 
@@ -39,7 +39,7 @@ const Overview = ({ sectionTitle = "game5" }) => {
     };
 
     fetchImages();
-  }, [sectionTitle]);
+  }, [sectioncategory]);
 
   useGSAP(() => {
     const clipAnimation = gsap.timeline({

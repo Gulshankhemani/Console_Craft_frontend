@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import Button from "../Components/Button.jsx";
 import { useWindowScroll } from "react-use";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom"; // Added useLocation
 import gsap from "gsap";
 import clsx from "clsx";
 
@@ -24,7 +24,11 @@ const Navbar = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
 
   const navigate = useNavigate();
+  const location = useLocation(); // Get current route
   const isAuthenticated = !!localStorage.getItem("token");
+
+  // Check if we're on the homepage (/)
+  const isHomePage = location.pathname === "/";
 
   const toggleAudioIndicator = () => {
     setIsAudioPlaying((prev) => !prev);
@@ -45,6 +49,14 @@ const Navbar = () => {
   }, [isAudioPlaying]);
 
   useEffect(() => {
+    if (!isHomePage) {
+      // On non-homepage routes, keep navbar static and visible
+      setIsNavVisible(true);
+      navContainerRef.current.classList.add("floating-nav");
+      return;
+    }
+
+    // Homepage-specific scroll behavior
     if (currentScrollY === 0) {
       setIsNavVisible(true);
       navContainerRef.current.classList.remove("floating-nav");
@@ -57,15 +69,22 @@ const Navbar = () => {
     }
 
     setLastScrollY(currentScrollY);
-  }, [currentScrollY, lastScrollY]);
+  }, [currentScrollY, lastScrollY, isHomePage]);
 
   useEffect(() => {
+    if (!isHomePage) {
+      // On non-homepage routes, ensure navbar stays visible without animation
+      gsap.set(navContainerRef.current, { y: 0, opacity: 1 });
+      return;
+    }
+
+    // GSAP animation only on homepage
     gsap.to(navContainerRef.current, {
       y: isNavVisible ? 0 : -100,
       opacity: isNavVisible ? 1 : 0,
       duration: 0.2,
     });
-  }, [isNavVisible]);
+  }, [isNavVisible, isHomePage]);
 
   return (
     <div

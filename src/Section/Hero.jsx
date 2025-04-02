@@ -7,12 +7,22 @@ import VideoPreview from "../Components/VideoPreview";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Hero = ({sectionTitle = "hero"}) => {
+const Hero = ({ sectionTitle = "hero" }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hasClicked, setHasClicked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [videos, setVideos] = useState([]);
   const nextVideoRef = useRef(null);
+
+  // Predefined titles corresponding to the 6 videos
+  const titles = [
+    "Play Station",
+    "Laptop",
+    "Nintendo Switch",
+    "Ghost of Tsushima",
+    "Black-Myth Wukong",
+    "GTA6",
+  ];
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -95,6 +105,39 @@ const Hero = ({sectionTitle = "hero"}) => {
     });
   });
 
+  // Function to split and format the title
+  const splitAndFormatTitle = (title) => {
+    const words = title.split(" ");
+    let firstPart = "redefine"; // Default fallback
+    let secondPart = "Gaming";  // Default fallback
+
+    if (words.length > 1) {
+      // For multi-word titles, use first word and rest
+      firstPart = words[0];           // e.g., "Play"
+      secondPart = words.slice(1).join(" "); // e.g., "Station"
+    } else {
+      // For single words, use the word as first part, keep "Gaming" as second
+      firstPart = words[0];
+    }
+
+    // Format a word by bolding 'a' and 'n'
+    const formatWord = (word) =>
+      word.split("").map((char, index) => {
+        if (char.toLowerCase() === "a" || char.toLowerCase() === "n") {
+          return <b key={index}>{char}</b>;
+        }
+        return char;
+      });
+
+    return {
+      first: formatWord(firstPart),
+      second: formatWord(secondPart),
+    };
+  };
+
+  // Get the formatted title parts for the current index
+  const currentTitleParts = splitAndFormatTitle(titles[currentIndex] || "redefine Gaming");
+
   return (
     <div className="relative h-dvh w-screen overflow-x-hidden">
       <div
@@ -104,33 +147,32 @@ const Hero = ({sectionTitle = "hero"}) => {
         <div>
           <div className="mask-clip-path absolute absolute-center z-50 size-64 cursor-pointer overflow-hidden rounded-lg">
             <VideoPreview>
-            <div
-              onClick={handleMiniVdClick}
-              className="origin-center scale-50 opacity-0 transition-all duration-500 ease-in hover:scale-100 hover:opacity-100"
-            >
-              {/* Removed console.log from JSX */}
-              <video
-                ref={nextVideoRef}
-                src={videos[upcomingVideoIndex]?.videoUrl}
-                loop
-                muted
-                id="current-video"
-                className="size-64 origin-center scale-150 object-cover object-center"
-                onCanPlay={() =>
-                  console.log(
-                    "Mini video ready to play:",
-                    videos[upcomingVideoIndex]?.videoUrl
-                  )
-                }
-                onError={(e) =>
-                  console.error(
-                    "Mini video failed to load:",
-                    videos[upcomingVideoIndex]?.videoUrl,
-                    e
-                  )
-                }
-              />
-            </div>
+              <div
+                onClick={handleMiniVdClick}
+                className="origin-center scale-50 opacity-0 transition-all duration-500 ease-in hover:scale-100 hover:opacity-100"
+              >
+                <video
+                  ref={nextVideoRef}
+                  src={videos[upcomingVideoIndex]?.videoUrl}
+                  loop
+                  muted
+                  id="current-video"
+                  className="size-64 origin-center scale-150 object-cover object-center"
+                  onCanPlay={() =>
+                    console.log(
+                      "Mini video ready to play:",
+                      videos[upcomingVideoIndex]?.videoUrl
+                    )
+                  }
+                  onError={(e) =>
+                    console.error(
+                      "Mini video failed to load:",
+                      videos[upcomingVideoIndex]?.videoUrl,
+                      e
+                    )
+                  }
+                />
+              </div>
             </VideoPreview>
           </div>
           <video
@@ -159,7 +201,7 @@ const Hero = ({sectionTitle = "hero"}) => {
             autoPlay
             loop
             muted
-            playsInline // Added for mobile compatibility
+            playsInline
             className="absolute left-0 top-0 size-full object-cover object-center"
             onCanPlay={() =>
               console.log(
@@ -177,12 +219,12 @@ const Hero = ({sectionTitle = "hero"}) => {
           />
         </div>
         <h1 className="special-font hero-heading absolute bottom-5 right-5 z-40 text-blue-75">
-          G<b>a</b>ming
+          {currentTitleParts.second}
         </h1>
         <div className="absolute left-0 top-0 z-40 size-full">
           <div className="mt-24 px-5 sm:px-10">
             <h1 className="special-font hero-heading text-blue-100">
-              redefi<b>n</b>e
+              {currentTitleParts.first}
             </h1>
             <p className="mb-5 max-w-64 font-robert-regular text-blue-100">
               Enter in your Dream world
@@ -191,7 +233,7 @@ const Hero = ({sectionTitle = "hero"}) => {
         </div>
       </div>
       <h1 className="special-font hero-heading absolute bottom-5 right-5 text-black">
-        G<b>A</b>MING
+      {currentTitleParts.second}
       </h1>
     </div>
   );
