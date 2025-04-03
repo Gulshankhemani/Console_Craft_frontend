@@ -38,18 +38,24 @@ const Login = () => {
           headers: {
             "Content-Type": "application/json",
           },
+          withCredentials: true,
         }
       );
-      console.log("Response:", response.data);
+      console.log("Login Response:", response.data);
 
-      // Store the token in localStorage (assuming the backend returns a token)
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
+      // Store the token in localStorage
+      const token = response.data.message.accessToken; // Correct path based on your response structure
+      if (token) {
+        localStorage.setItem("token", token);
+        console.log("Token stored in localStorage:", token);
+      } else {
+        console.error("No token found in response");
+        setErrorMessage("Login successful, but no token received.");
       }
 
       navigate("/");
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Login Error:", error.response?.data || error.message);
       setErrorMessage(
         error.response?.data?.message || "Login failed, please try again."
       );
