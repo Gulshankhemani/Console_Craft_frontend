@@ -31,9 +31,13 @@ const Page_Component = ({ children }) => {
   }, []);
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Navbars />
-      {isLoading ? <Loader /> : <div>{children}</div>}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className="flex-1">{children}</div> // Ensure content takes up remaining space
+      )}
       <Footer />
     </div>
   );

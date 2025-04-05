@@ -12,7 +12,7 @@ const BentoProductCard = ({
   isSponsored = false,
 }) => {
   return (
-    <div className="relative bg-black rounded-lg shadow-md overflow-hidden border-hsla transition-transform transform hover:scale-105">
+    <div className="relative bg-blue-75 rounded-lg shadow-md overflow-hidden border-hsla transition-transform transform hover:scale-105">
       <div className="relative flex flex-row items-start h-auto p-4">
         <Link to={`/product/${productId}`}>
           <div className="w-80 h-48 mr-12">
@@ -25,22 +25,23 @@ const BentoProductCard = ({
         </Link>
         <div className="flex flex-col justify-start flex-1 space-y-2">
           <Link to={`/product/${productId}`}>
-            <h3 className="text-lg font-circular-web text-blue-50 special-font hover:text-blue-200">
+            <h3 className="text-lg font-circular-web text-black special-font hover:text-blue-200">
               {title}
             </h3>
           </Link>
           <p className="text-base text-yellow-500 font-circular-web">
-            {"★".repeat(Math.round(rating))} <span className="ml-1">({reviews})</span>
+            {"★".repeat(Math.round(rating))}{" "}
+            <span className="ml-1">({reviews})</span>
           </p>
-          <p className="text-lg text-blue-50 opacity-50 font-circular-web">
+          <p className="text-lg text-black opacity-50 font-circular-web">
             ₹{price}
           </p>
-          <p className="text-base text-blue-50 opacity-50 font-circular-web">
+          <p className="text-base text-black opacity-50 font-circular-web">
             FREE delivery Wed, 2 Apr
           </p>
         </div>
         {isSponsored && (
-          <span className="absolute top-2 right-2 text-sm text-white/20 bg-black px-2 py-1 rounded border-hsla">
+          <span className="absolute top-2 right-2 text-sm text-white/20 bg-blue-75 px-2 py-1 rounded border-hsla">
             Sponsored
           </span>
         )}
@@ -155,13 +156,17 @@ const Playstation = ({ sectioncategory = "PlayStation" }) => {
   };
 
   return (
-    <div className="min-h-screen bg-black font-sans flex">
-      {/* Filters Section (Fixed Sidebar) */}
-      <aside className="w-64 p-4 bg-black shadow-md overflow-y-auto border-hsla fixed top-20 left-0 h-[calc(100vh-5rem)]">
-        <h2 className="text-xl font-bold mb-4 text-blue-50 font-circular-web">Filters</h2>
+    <div className="flex bg-blue-75 font-sans mt-15">
+      {/* Filters Section (Regular Flow) */}
+      <aside className="w-64 p-4 bg-blue-75 shadow-md border-hsla">
+        <h2 className="text-xl font-bold mb-4 text-black font-circular-web">
+          Filters
+        </h2>
 
         <details open className="mb-4">
-          <summary className="text-lg font-semibold cursor-pointer text-blue-50 font-circular-web">Category</summary>
+          <summary className="text-lg font-semibold cursor-pointer text-black font-circular-web">
+            Category
+          </summary>
           <div className="mt-2 space-y-2">
             {["Games", "PC Components", "PlayStation"].map((category) => (
               <label key={category} className="flex items-center">
@@ -171,14 +176,18 @@ const Playstation = ({ sectioncategory = "PlayStation" }) => {
                   checked={filters.category.includes(category)}
                   onChange={() => handleFilterChange("category", category)}
                 />
-                <span className="text-sm text-blue-50 opacity-50 font-circular-web">{category}</span>
+                <span className="text-sm text-black opacity-50 font-circular-web">
+                  {category}
+                </span>
               </label>
             ))}
           </div>
         </details>
 
         <details open className="mb-4">
-          <summary className="text-lg font-semibold cursor-pointer text-blue-50 font-circular-web">Price Range</summary>
+          <summary className="text-lg font-semibold cursor-pointer text-black font-circular-web">
+            Price Range
+          </summary>
           <div className="mt-2">
             <input
               type="range"
@@ -186,11 +195,14 @@ const Playstation = ({ sectioncategory = "PlayStation" }) => {
               max="100000"
               value={filters.priceRange[1]}
               onChange={(e) =>
-                handleFilterChange("priceRange", [0, parseInt(e.target.value)])
+                handleFilterChange("priceRange", [
+                  0,
+                  parseInt(e.target.value),
+                ])
               }
               className="w-full accent-blue-50"
             />
-            <div className="flex justify-between text-xs text-blue-50 opacity-50 font-circular-web">
+            <div className="flex justify-between text-xs text-black opacity-50 font-circular-web">
               <span>₹0</span>
               <span>₹{filters.priceRange[1]}</span>
             </div>
@@ -198,7 +210,9 @@ const Playstation = ({ sectioncategory = "PlayStation" }) => {
         </details>
 
         <details open className="mb-4">
-          <summary className="text-lg font-semibold cursor-pointer text-blue-50 font-circular-web">Platform</summary>
+          <summary className="text-lg font-semibold cursor-pointer text-black font-circular-web">
+            Platform
+          </summary>
           <div className="mt-2 space-y-2">
             {["PC", "PS5", "PS4", "Xbox"].map((platform) => (
               <label key={platform} className="flex items-center">
@@ -208,14 +222,18 @@ const Playstation = ({ sectioncategory = "PlayStation" }) => {
                   checked={filters.platform.includes(platform)}
                   onChange={() => handleFilterChange("platform", platform)}
                 />
-                <span className="text-sm text-blue-50 opacity-50 font-circular-web">{platform}</span>
+                <span className="text-sm text-black opacity-50 font-circular-web">
+                  {platform}
+                </span>
               </label>
             ))}
           </div>
         </details>
 
         <details open className="mb-4">
-          <summary className="text-lg font-semibold cursor-pointer text-blue-50 font-circular-web">Storage</summary>
+          <summary className="text-lg font-semibold cursor-pointer text-black font-circular-web">
+            Storage
+          </summary>
           <div className="mt-2 space-y-2">
             {["64 GB", "128 GB", "256 GB", "512 GB", "1 TB"].map((storage) => (
               <label key={storage} className="flex items-center">
@@ -225,14 +243,18 @@ const Playstation = ({ sectioncategory = "PlayStation" }) => {
                   checked={filters.storage.includes(storage)}
                   onChange={() => handleFilterChange("storage", storage)}
                 />
-                <span className="text-sm text-blue-50 opacity-50 font-circular-web">{storage}</span>
+                <span className="text-sm text-black opacity-50 font-circular-web">
+                  {storage}
+                </span>
               </label>
             ))}
           </div>
         </details>
 
         <details open className="mb-4">
-          <summary className="text-lg font-semibold cursor-pointer text-blue-50 font-circular-web">RAM Size</summary>
+          <summary className="text-lg font-semibold cursor-pointer text-black font-circular-web">
+            RAM Size
+          </summary>
           <div className="mt-2 space-y-2">
             {["4 GB", "8 GB", "16 GB", "32 GB"].map((ram) => (
               <label key={ram} className="flex items-center">
@@ -242,7 +264,9 @@ const Playstation = ({ sectioncategory = "PlayStation" }) => {
                   checked={filters.ram.includes(ram)}
                   onChange={() => handleFilterChange("ram", ram)}
                 />
-                <span className="text-sm text-blue-50 opacity-50 font-circular-web">{ram}</span>
+                <span className="text-sm text-black opacity-50 font-circular-web">
+                  {ram}
+                </span>
               </label>
             ))}
           </div>
@@ -250,8 +274,10 @@ const Playstation = ({ sectioncategory = "PlayStation" }) => {
       </aside>
 
       {/* Product Listing Section */}
-      <main className="flex-1 p-6 ml-64 mt-20">
-        <h1 className="text-3xl bento-title special-font mb-6 text-blue-50">Ga<b>m</b>i<b>n</b>g Co<b>n</b>soles</h1>
+      <main className="flex-1 p-6">
+        <h1 className="text-3xl bento-title special-font mb-6 text-black">
+          Ga<b>m</b>i<b>n</b>g Co<b>n</b>soles
+        </h1>
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-50"></div>
