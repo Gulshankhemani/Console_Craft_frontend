@@ -17,6 +17,7 @@ import Gift_Card from "../NavPages/Gift_Card.jsx";
 import Feature from "../Section/Features.jsx";
 import Playstation from "../Pages/Playstation.jsx";
 import PsOrder from "../Product_pages/PsOrder.jsx";
+import Story from "../Section/Story.jsx";
 
 const Page_Component = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -53,6 +54,7 @@ const router = createBrowserRouter(
             <Hero />
             <Overview />
             <Feature />
+            <Story/>
           </Page_Component>
         }
       />
@@ -61,6 +63,7 @@ const router = createBrowserRouter(
       <Route path="/gift_card" element={<Gift_Card />} />
       <Route path="/deals" element={<Deals />} />
       <Route path="/signin" element={<Signin />} />
+      
       <Route
         path="/playstation"
         element={
