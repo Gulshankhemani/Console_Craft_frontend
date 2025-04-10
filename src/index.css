@@ -296,8 +296,7 @@ body {
 
   @layer utilities {
     .btn {
-      @apply flex items-center justify-center cursor-pointer p-3 
-             text-gray-900 mx-auto relative rounded-full shadow-lg transition-all duration-300 ease-in-out active:scale-95;
+      @apply flex items-center justify-center cursor-pointer p-3 text-gray-900 mx-auto relative rounded-full shadow-lg transition-all duration-300 ease-in-out active:scale-95;
       position: relative;
       overflow: hidden;
       @apply bg-blue-50; 
@@ -329,17 +328,17 @@ body {
     .btn:hover {
       background: linear-gradient(
         45deg,
-        #fff176, /* Light yellow */
-        #fdd835, /* Vibrant yellow */
-        #ffb300, /* Deep amber-yellow */
-        #ffca28  /* Golden yellow */
+        #fff176, 
+        #fdd835, 
+        #ffb300, 
+        #ffca28  
       );
       background-size: 600%;
-      animation: glowing 8s linear infinite; /* Slightly faster for energy */
-      @apply scale-105; /* Subtle scale-up on hover */
+      animation: glowing 8s linear infinite; 
+      @apply scale-105; 
     }
   
     .btn:hover::before {
-      opacity: 0.6; /* Lower opacity for a refined glow */
+      opacity: 0.6; 
     }
   }

@@ -151,24 +151,6 @@ const Signin = () => {
               </div>
             </div>
           </div>
-          {/* Commented out Cover Image Upload */}
-          {/* <div className="relative">
-            <label className="block text-sm font-medium text-white/70 mb-1">Upload Cover Image</label>
-            <div className="relative">
-              <input
-                type="file"
-                name="coverImage"
-                onChange={handleChange}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                accept="image/*"
-                disabled={isLoading}
-              />
-              <div className="w-full h-12 px-4 bg-transparent border border-white/30 rounded-xl flex items-center text-white">
-                <span className="flex-1 truncate">{coverImageName || "Choose Cover Image"}</span>
-                <span className="text-white/70">🖼️</span>
-              </div>
-            </div>
-          </div> */}
           <button
             type="submit"
             className={`w-full py-3 text-white rounded-xl transition-all duration-200 ${

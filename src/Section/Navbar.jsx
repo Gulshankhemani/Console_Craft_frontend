@@ -1,9 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import Button from "../Components/Button.jsx";
 import { useWindowScroll } from "react-use";
-import { Link, useNavigate, useLocation } from "react-router-dom"; // Added useLocation
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import gsap from "gsap";
 import clsx from "clsx";
+import axios from "axios";
 
 const navItems = [
   { name: "Home", path: "/" },
@@ -24,10 +25,9 @@ const Navbar = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
 
   const navigate = useNavigate();
-  const location = useLocation(); // Get current route
+  const location = useLocation();
   const isAuthenticated = !!localStorage.getItem("token");
 
-  // Check if we're on the homepage (/)
   const isHomePage = location.pathname === "/";
 
   const toggleAudioIndicator = () => {
@@ -35,9 +35,69 @@ const Navbar = () => {
     setIsIndicatorActive((prev) => !prev);
   };
 
-  const handleSignout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+  // Function to refresh access token
+  const refreshToken = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/users/refresh-token",
+        {},
+        { withCredentials: true } // Send refresh token via cookies
+      );
+      const { accessToken } = response.data.data;
+      localStorage.setItem("token", accessToken); // Update localStorage
+      return accessToken;
+    } catch (error) {
+      console.error("Token refresh failed:", error);
+      throw error;
+    }
+  };
+
+  // Handle logout with token refresh fallback
+  const handleSignout = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/users/logout",
+        {},
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      localStorage.removeItem("token");
+      navigate("/");
+      console.log("Logout successful:", response.data);
+    } catch (error) {
+      console.error("Logout failed:", error.response?.data || error.message);
+
+      // If token is expired (401), try refreshing it
+      if (error.response?.status === 401) {
+        try {
+          const newToken = await refreshToken();
+          const retryResponse = await axios.post(
+            "http://localhost:8000/api/v1/users/logout",
+            {},
+            {
+              withCredentials: true,
+              headers: {
+                Authorization: `Bearer ${newToken}`,
+              },
+            }
+          );
+          localStorage.removeItem("token");
+          navigate("/");
+          console.log("Logout successful after refresh:", retryResponse.data);
+        } catch (refreshError) {
+          // If refresh fails, perform client-side logout
+          console.error("Refresh failed, forcing client-side logout:", refreshError);
+          localStorage.removeItem("token");
+          navigate("/");
+        }
+      }
+    }
   };
 
   useEffect(() => {
@@ -50,13 +110,11 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!isHomePage) {
-      // On non-homepage routes, keep navbar static and visible
       setIsNavVisible(true);
       navContainerRef.current.classList.add("floating-nav");
       return;
     }
 
-    // Homepage-specific scroll behavior
     if (currentScrollY === 0) {
       setIsNavVisible(true);
       navContainerRef.current.classList.remove("floating-nav");
@@ -73,12 +131,10 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!isHomePage) {
-      // On non-homepage routes, ensure navbar stays visible without animation
       gsap.set(navContainerRef.current, { y: 0, opacity: 1 });
       return;
     }
 
-    // GSAP animation only on homepage
     gsap.to(navContainerRef.current, {
       y: isNavVisible ? 0 : -100,
       opacity: isNavVisible ? 1 : 0,
@@ -95,29 +151,24 @@ const Navbar = () => {
         <nav className="flex size-full items-center justify-between p-4">
           <div className="flex items-center gap-7">
             <img src="/img/logo.png" alt="logo" className="w-10" />
+            <Link to='/cart'>
             <Button
               name="Product"
               containerclass="bg-blue-50 md:flex hidden item-center justify-center gap-1"
             />
+            </Link>
           </div>
 
           <div className="flex h-full items-center">
             <div className="hidden md:block">
               {navItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className="nav-hover-btn"
-                >
+                <Link key={item.path} to={item.path} className="nav-hover-btn">
                   {item.name}
                 </Link>
               ))}
               {isAuthenticated ? (
-                <button
-                  onClick={handleSignout}
-                  className="nav-hover-btn"
-                >
-                  Signout
+                <button onClick={handleSignout} className="nav-hover-btn">
+                  Log out
                 </button>
               ) : (
                 <Link to="/login" className="nav-hover-btn">

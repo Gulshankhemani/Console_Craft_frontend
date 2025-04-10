@@ -18,6 +18,8 @@ import Feature from "../Section/Features.jsx";
 import Playstation from "../Pages/Playstation.jsx";
 import PsOrder from "../Product_pages/PsOrder.jsx";
 import Story from "../Section/Story.jsx";
+import Cart from "../Components/cart.jsx";
+import Games from "../Section/Games.jsx";
 
 const Page_Component = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -55,6 +57,7 @@ const router = createBrowserRouter(
             <Overview />
             <Feature />
             <Story/>
+            <Games/>
           </Page_Component>
         }
       />
@@ -63,6 +66,7 @@ const router = createBrowserRouter(
       <Route path="/gift_card" element={<Gift_Card />} />
       <Route path="/deals" element={<Deals />} />
       <Route path="/signin" element={<Signin />} />
+      <Route path="/cart" element={<Cart />} />
       
       <Route
         path="/playstation"

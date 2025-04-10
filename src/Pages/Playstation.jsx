@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
+
 const BentoProductCard = ({
   imageUrl,
   title,
@@ -12,8 +13,8 @@ const BentoProductCard = ({
   isSponsored = false,
 }) => {
   return (
-    <div className="relative bg-blue-75 rounded-lg shadow-md overflow-hidden border-hsla transition-transform transform hover:scale-105">
-      <div className="relative flex flex-row items-start h-auto p-4">
+    <div className="relative bg-blue-75 rounded-lg shadow-md overflow-hidden border-hsla ">
+      <div className="relative flex flex-row items-start h-auto w-auto p-4">
         <Link to={`/product/${productId}`}>
           <div className="w-80 h-48 mr-12">
             <img

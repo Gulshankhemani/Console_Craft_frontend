@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Button from "../Components/Button.jsx";
 
 const PsOrder = () => {
   const { productId } = useParams();
@@ -57,7 +58,7 @@ const PsOrder = () => {
 
   const handleAddToCart = async () => {
     const token = localStorage.getItem("token");
-    console.log("Token being sent:", token); // Debug: Check token
+    console.log("Token being sent:", token);
 
     if (!token) {
       setError("Please log in to add items to your cart.");
@@ -72,11 +73,11 @@ const PsOrder = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/cart/add",
+        "http://localhost:8000/api/v1/cart",
         {
-          productId: productId, // Use the productId from params
+          productId: productId,
           quantity: 1,
-          price: product.price, // Use the price from the fetched product
+          price: product.price,
         },
         {
           headers: {
@@ -88,6 +89,7 @@ const PsOrder = () => {
       );
       console.log("Add to Cart Response:", response.data);
       alert("Item added to cart successfully!");
+      navigate("/cart");
     } catch (err) {
       setError(err.response?.data?.message || "Failed to add item to cart.");
       console.error("Add to Cart Error:", err.response?.data || err.message);
@@ -113,7 +115,6 @@ const PsOrder = () => {
   return (
     <div className="min-h-screen bg-black p-4 pt-20 font-sans">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Left Section: Product Image with Magnifier Effect */}
         <div className="col-span-1">
           <div className="relative">
             <div
@@ -153,7 +154,6 @@ const PsOrder = () => {
           </p>
         </div>
 
-        {/* Middle Section: Product Details */}
         <div className="col-span-1">
           <h1 className="text-2xl font-bold text-blue-50">{product.title}</h1>
           <p className="text-blue-50 opacity-50">Platform: PlayStation 5</p>
@@ -195,7 +195,6 @@ const PsOrder = () => {
           </p>
         </div>
 
-        {/* Right Section: Purchase Options */}
         <div className="col-span-1 border border-blue-50/20 p-4 rounded-lg shadow">
           <p className="text-2xl font-bold text-blue-50">
             ₹{product.price.toLocaleString()}
@@ -204,15 +203,16 @@ const PsOrder = () => {
             FREE delivery Thursday, 3 April. Order within 2 hrs 12 mins. Details
           </p>
           <p className="text-green-500 font-semibold mt-2">In stock</p>
-          <button
+          <Button
+            name="Add to cart"
+            containerClass="w-full  text-black "
             onClick={handleAddToCart}
-            className="w-full bg-yellow-500 text-black py-2 rounded mt-4 hover:bg-yellow-600 transition"
-          >
-            Add to cart
-          </button>
-          <button className="w-full bg-orange-500 text-white py-2 rounded mt-2 hover:bg-orange-600 transition">
-            Buy Now
-          </button>
+          />
+          <Button
+            name="Buy Now"
+            containerClass="w-full  text-white  mt-2"
+            onClick={() => console.log("Buy Now clicked")} // Replace with actual buy now logic if needed
+          />
         </div>
       </div>
     </div>
