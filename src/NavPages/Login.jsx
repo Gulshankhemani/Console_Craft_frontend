@@ -2,15 +2,16 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import login_image from "../Assets/login_image.jpg";
+import Button from "../Components/Button.jsx";
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // New state for password visibility
 
   const navigate = useNavigate();
 
@@ -20,6 +21,10 @@ const Login = () => {
       ...prevState,
       [name]: value,
     }));
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev); // Toggle password visibility
   };
 
   const handleSubmit = async (event) => {
@@ -44,7 +49,7 @@ const Login = () => {
       console.log("Login Response:", response.data);
 
       // Store the token in localStorage
-      const token = response.data.message.accessToken; // Correct path based on your response structure
+      const token = response.data.message.accessToken;
       if (token) {
         localStorage.setItem("token", token);
         console.log("Token stored in localStorage:", token);
@@ -89,7 +94,7 @@ const Login = () => {
           </div>
           <div className="relative">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"} // Dynamically set type
               onChange={handleChange}
               name="password"
               placeholder="Password"
@@ -97,43 +102,47 @@ const Login = () => {
               required
               disabled={isLoading}
             />
-            <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white opacity-70 text-xl">🔒</span>
+            <span
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white opacity-70 text-xl cursor-pointer"
+              onClick={togglePasswordVisibility} // Toggle on click
+            >
+              {showPassword ? "👁️" : "👁️‍🗨️"} {/* Eye icon changes based on state */}
+            </span>
           </div>
-          <button
-            type="submit"
-            className={`font-['Amazon_Ember',Arial,sans-serif] opacity-100 w-full p-2 text-white rounded-[10px] hover:scale-105 transform transition-transform duration-200 ease-in-out overflow-visible mt-8 ${
-              isLoading ? "bg-green-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-            }`}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <span className="flex items-center justify-center">
-                <svg
-                  className="animate-spin h-5 w-5 mr-2 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-                Signing in...
-              </span>
-            ) : (
-              "Sign In"
-            )}
-          </button>
+          <Button
+            name={
+              isLoading ? (
+                <span className="flex items-center justify-center">
+                  <svg
+                    className="animate-spin h-5 w-5 mr-2 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Signing in...
+                </span>
+              ) : (
+                "Sign In"
+              )
+            }
+            containerClass={`opacity-100 w-full text-white rounded-[10px] hover:scale-105 transform transition-transform duration-200 ease-in-out overflow-visible mt-8`}
+            onClick={handleSubmit} // Note: onClick is not strictly needed since form handles submission
+            // disabled={isLoading}
+          />
         </form>
         <div className="mt-6 space-y-4 text-center">
           <p className="text-sm">

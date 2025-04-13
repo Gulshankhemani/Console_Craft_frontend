@@ -56,8 +56,8 @@ const router = createBrowserRouter(
             <Hero />
             <Overview />
             <Feature />
-            <Story/>
-            <Games/>
+            <Story />
+            <Games />
           </Page_Component>
         }
       />
@@ -67,7 +67,6 @@ const router = createBrowserRouter(
       <Route path="/deals" element={<Deals />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/cart" element={<Cart />} />
-      
       <Route
         path="/playstation"
         element={
@@ -76,7 +75,14 @@ const router = createBrowserRouter(
           </Page_Component>
         }
       />
-      <Route path="/product/:productId" element={<PsOrder />} />
+      <Route
+        path="/product/:productId"
+        element={
+          <Page_Component>
+            <PsOrder />
+          </Page_Component>
+        }
+      />
     </>
   )
 );

@@ -154,7 +154,7 @@ const Navbar = () => {
             <Link to='/cart'>
             <Button
               name="Product"
-              containerclass="bg-blue-50 md:flex hidden item-center justify-center gap-1"
+              containerclass="bg-blue-50 md:flex hidden item-center justify-center gap-1 w-64"
             />
             </Link>
           </div>

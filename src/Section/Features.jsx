@@ -34,7 +34,7 @@ const BentoTilt = ({ children, className = "" }) => {
   );
 };
 
-const BentoCard = ({ videoUrl, title, description, isComingSoon }) => {
+const BentoCard = ({ videoUrl, title, description, Available }) => {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [hoverOpacity, setHoverOpacity] = useState(0);
   const hoverButtonRef = useRef(null);
@@ -70,13 +70,13 @@ const BentoCard = ({ videoUrl, title, description, isComingSoon }) => {
           )}
         </div>
 
-        {isComingSoon && (
+        {Available && (
           <div
             ref={hoverButtonRef}
             onMouseMove={handleMouseMove}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            className="border-hsla relative flex w-fit cursor-pointer items-center gap-1 overflow-hidden rounded-full bg-black px-5 py-2 text-xs uppercase text-white/20"
+            className="border-hsla relative flex w-fit cursor-pointer items-center gap-1 overflow-hidden rounded-full bg-black px-5 py-2 text-xs uppercase text-blue-50"
           >
             <div
               className="pointer-events-none absolute -inset-px opacity-0 transition duration-300"
@@ -85,7 +85,7 @@ const BentoCard = ({ videoUrl, title, description, isComingSoon }) => {
                 background: `radial-gradient(100px circle at ${cursorPosition.x}px ${cursorPosition.y}px, #656fe288, #00000026)`,
               }}
             />
-            <p className="relative z-20">coming soon</p>
+            <p className="relative z-20">Available</p>
           </div>
         )}
       </div>
@@ -144,9 +144,9 @@ const Features = () => {
         <BentoTilt className="border-hsla relative mb-7 h-96 w-full overflow-hidden rounded-md md:h-[65vh]">
           <BentoCard
             videoUrl={videos[2]?.videoUrl}
-            title={<>radia<b>n</b>t</>}
-            description="A cross-platform metagame app, turning your activities across Web2 and Web3 games into a rewarding adventure."
-            isComingSoon
+            title={<><b>N</b>inte<b>n</b>do</>}
+            description="A hybrid console, like its predecessor, offering both handheld and TV modes."
+            Available
           />
         </BentoTilt>
 
@@ -156,36 +156,27 @@ const Features = () => {
               videoUrl={videos[4]?.videoUrl}
               title={<>zig<b>m</b>a</>}
               description="An anime and gaming-inspired NFT collection - the IP primed for expansion."
-              isComingSoon
+              Available
             />
           </BentoTilt>
           <BentoTilt className="bento-tilt_1 row-span-1 ms-32 md:col-span-1 md:ms-0">
           <Link to = {"/playstation"}>
             <BentoCard
               videoUrl={videos[0]?.videoUrl}
-              title={<>n<b>e</b>xus</>}
-              description="A gamified social hub, adding a new dimension of play to social interaction for Web3 communities."
-              isComingSoon
+              title={<>Pl<b>a</b>ySt<b>a</b>tion 5</>}
+              description="A next-generation home video game console developed by Sony Interactive Entertainment. "
+              Available
             />
           </Link>
           </BentoTilt>
           <BentoTilt className="bento-tilt_1 me-14 md:col-span-1 md:me-0">
             <BentoCard
               videoUrl={videos[1]?.videoUrl}
-              title={<>az<b>u</b>l</>}
-              description="A cross-world AI Agent - elevating your gameplay to be more fun and productive."
-              isComingSoon
+              title={<>Com<b>p</b>ute<b>r</b>s</>}
+              description="You can build your own computers."
+              Available
             />
           </BentoTilt>
-
-          <BentoTilt className="bento-tilt_2">
-            <div className="flex size-full flex-col justify-between bg-violet-300 p-5">
-              <h1 className="bento-title special-font max-w-64 text-black">
-                M<b>o</b>re co<b>m</b>ing s<b>o</b>on.
-              </h1>
-            </div>
-          </BentoTilt>
-
           <BentoTilt className="bento-tilt_2">
             <video
               src={videos[3]?.videoUrl}
@@ -195,6 +186,13 @@ const Features = () => {
               playsInline
               className="size-full object-cover object-center"
             />
+          </BentoTilt>
+          <BentoTilt className="bento-tilt_2">
+            <div className="flex size-full flex-col justify-between bg-violet-300 p-5">
+              <h1 className="bento-title special-font max-w-64 text-black">
+                M<b>o</b>re co<b>m</b>ing s<b>o</b>on.
+              </h1>
+            </div>
           </BentoTilt>
         </div>
       </div>
