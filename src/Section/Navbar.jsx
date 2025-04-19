@@ -35,6 +35,7 @@ const Navbar = () => {
     setIsIndicatorActive((prev) => !prev);
   };
 
+
   // Function to refresh access token
   const refreshToken = async () => {
     try {
@@ -153,7 +154,7 @@ const Navbar = () => {
             <img src="/img/logo.png" alt="logo" className="w-10" />
             <Link to='/cart'>
             <Button
-              name="Product"
+              name="Cart"
               containerclass="bg-blue-50 md:flex hidden item-center justify-center gap-1 w-64"
             />
             </Link>

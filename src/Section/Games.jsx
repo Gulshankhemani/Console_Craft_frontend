@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
-
 
 // BentoTilt component (unchanged)
 const BentoTilt = ({ children, className = "" }) => {
@@ -10,7 +10,8 @@ const BentoTilt = ({ children, className = "" }) => {
   const handleMouseMove = (event) => {
     if (!itemRef.current) return;
 
-    const { left, top, width, height } = itemRef.current.getBoundingClientRect();
+    const { left, top, width, height } =
+      itemRef.current.getBoundingClientRect();
     const relativeX = (event.clientX - left) / width;
     const relativeY = (event.clientY - top) / height;
     const tiltX = (relativeY - 0.5) * 5;
@@ -35,8 +36,16 @@ const BentoTilt = ({ children, className = "" }) => {
   );
 };
 
-// BentoCard component (modified to use images)
-const BentoCard = ({ imageUrl, title, description, Available }) => {
+// BentoCard component (unchanged)
+const BentoCard = ({
+  imageUrl,
+  title,
+  price,
+  rating,
+  reviews,
+  productId,
+  Available,
+}) => {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [hoverOpacity, setHoverOpacity] = useState(0);
   const hoverButtonRef = useRef(null);
@@ -64,8 +73,16 @@ const BentoCard = ({ imageUrl, title, description, Available }) => {
       <div className="relative z-10 flex size-full flex-col justify-between p-5 text-blue-50">
         <div>
           <h1 className="bento-title special-font">{title}</h1>
-          {description && (
-            <p className="mt-3 max-w-64 text-xs md:text-base">{description}</p>
+          {price && (
+            <p className="mt-2 text-sm font-bold text-blue-75">
+              ₹{price.toLocaleString()}
+            </p>
+          )}
+          {rating && reviews && (
+            <p className="mt-1 text-xs text-yellow-500">
+              {"★".repeat(Math.round(rating))}{" "}
+              <span className="text-blue-75 opacity-70">({reviews})</span>
+            </p>
           )}
         </div>
 
@@ -92,10 +109,11 @@ const BentoCard = ({ imageUrl, title, description, Available }) => {
   );
 };
 
-// Games component (modified to fetch images)
+// Games component (updated for button-controlled sliding)
 const Games = ({ sectioncategory = "Games" }) => {
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const sliderRef = useRef(null);
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -121,113 +139,105 @@ const Games = ({ sectioncategory = "Games" }) => {
     };
 
     fetchImages();
-  },[sectioncategory]);
+  }, [sectioncategory]);
+
+  const scrollLeft = () => {
+    if (sliderRef.current) {
+      const cardWidth = 300; // Width of each card
+      const gap = 28; // Tailwind's space-x-7 (7 * 4px = 28px)
+      const scrollDistance = (cardWidth + gap) * 3; // Scroll by 3 cards
+      sliderRef.current.scrollBy({ left: -scrollDistance, behavior: "smooth" });
+    }
+  };
+
+  const scrollRight = () => {
+    if (sliderRef.current) {
+      const cardWidth = 300; // Width of each card
+      const gap = 28; // Tailwind's space-x-7 (7 * 4px = 28px)
+      const scrollDistance = (cardWidth + gap) * 3; // Scroll by 3 cards
+      sliderRef.current.scrollBy({ left: scrollDistance, behavior: "smooth" });
+    }
+  };
 
   if (isLoading) {
-    return <div>Loading features...</div>;
+    return (
+      <div className="min-h-screen bg-black flex justify-center items-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-75"></div>
+      </div>
+    );
   }
 
   return (
-    <section className="bg-black pb-52">
+    <section className="bg-black pb-20">
       <div id="games" className="container mx-auto px-3 md:px-10">
         <div className="px-5 py-32 relative">
           <h1 className="special-font hero-heading right-5 z-40 text-blue-75">
-            <b>G</b><b>a</b>mes
+            <b>G</b>
+            <b>a</b>mes
           </h1>
         </div>
-        <div className="grid h-[135vh] w-full grid-cols-3 grid-row gap-7">
-          <BentoTilt className="bento-tilt_1 me-14 md:col-span-1 md:me-0">
-            <BentoCard
-              imageUrl={images[1]?.imageUrl}
-            />
-          </BentoTilt>
-          <BentoTilt className="bento-tilt_1 me-14 md:col-span-1 md:me-0">
-            <BentoCard
-              imageUrl={images[2]?.imageUrl}
-            />
-          </BentoTilt>
-          <BentoTilt className="bento-tilt_2">
-            <img
-              src={images[3]?.imageUrl}
-              alt="Feature image"
-              className="size-full object-cover object-center"
-              onError={(e) => console.error("Image failed to load:", images[3]?.imageUrl, e)}
-            />
-          </BentoTilt>
-          <BentoTilt className="bento-tilt_2">
-            <img
-              src={images[4]?.imageUrl}
-              alt="Feature image"
-              className="size-full object-cover object-center"
-              onError={(e) => console.error("Image failed to load:", images[3]?.imageUrl, e)}
-            />
-          </BentoTilt>
-          <BentoTilt className="bento-tilt_2">
-            <img
-              src={images[5]?.imageUrl}
-              alt="Feature image"
-              className="size-full object-cover object-center"
-              onError={(e) => console.error("Image failed to load:", images[3]?.imageUrl, e)}
-            />
-          </BentoTilt>
-          <BentoTilt className="bento-tilt_2">
-            <img
-              src={images[6]?.imageUrl}
-              alt="Feature image"
-              className="size-full object-cover object-center"
-              onError={(e) => console.error("Image failed to load:", images[3]?.imageUrl, e)}
-            />
-          </BentoTilt>
-          <BentoTilt className="bento-tilt_2">
-            <img
-              src={images[7]?.imageUrl}
-              alt="Feature image"
-              className="size-full object-cover object-center"
-              onError={(e) => console.error("Image failed to load:", images[3]?.imageUrl, e)}
-            />
-          </BentoTilt>
-          <BentoTilt className="bento-tilt_2">
-            <img
-              src={images[8]?.imageUrl}
-              alt="Feature image"
-              className="size-full object-cover object-center"
-              onError={(e) => console.error("Image failed to load:", images[3]?.imageUrl, e)}
-            />
-          </BentoTilt>
-          <BentoTilt className="bento-tilt_2">
-            <img
-              src={images[9]?.imageUrl}
-              alt="Feature image"
-              className="size-full object-cover object-center"
-              onError={(e) => console.error("Image failed to load:", images[3]?.imageUrl, e)}
-            />
-          </BentoTilt>
-          <BentoTilt className="bento-tilt_2">
-            <img
-              src={images[10]?.imageUrl}
-              alt="Feature image"
-              className="size-full object-cover object-center"
-              onError={(e) => console.error("Image failed to load:", images[3]?.imageUrl, e)}
-            />
-          </BentoTilt>
-          <BentoTilt className="bento-tilt_2">
-            <img
-              src={images[11]?.imageUrl}
-              alt="Feature image"
-              className="size-full object-cover object-center"
-              onError={(e) => console.error("Image failed to load:", images[3]?.imageUrl, e)}
-            />
-          </BentoTilt>
-          <BentoTilt className="bento-tilt_2">
-            <img
-              src={images[12]?.imageUrl}
-              alt="Feature image"
-              className="size-full object-cover object-center"
-              onError={(e) => console.error("Image failed to load:", images[3]?.imageUrl, e)}
-            />
-          </BentoTilt>
+        <div className="relative">
+          <button
+            onClick={scrollLeft}
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-blue-50  text-black p-2 rounded-full z-10 hover:bg-opacity-75"
+          >
+            ←
+          </button>
+          <button
+            onClick={scrollRight}
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-blue-50  text-black p-2 rounded-full z-10 hover:bg-opacity-75"
+          >
+            →
+          </button>
+          <div
+            ref={sliderRef}
+            className="flex overflow-x-hidden space-x-7 px-5 snap-x snap-mandatory"
+            style={{
+              scrollBehavior: "smooth",
+              msOverflowStyle: "none",
+              scrollbarWidth: "none",
+            }}
+          >
+            {images.slice(1).map((image, index) => (
+              <div
+                key={image._id}
+                className="flex-shrink-0 w-[300px] h-[400px] snap-start"
+              >
+                <BentoTilt className="bento-tilt_1 w-full h-full">
+                  <Link to={`/game/${image._id}`}>
+                    {index < 2 ? (
+                      <BentoCard
+                        imageUrl={image.imageUrl}
+                        title={image.title}
+                        reviews={image.reviews}
+                        productId={image._id}
+                      />
+                    ) : (
+                      <img
+                        src={image.imageUrl}
+                        alt={image.title || `Game ${index + 1}`}
+                        className="size-full object-cover object-center"
+                        onError={(e) =>
+                          console.error(
+                            "Image failed to load:",
+                            image.imageUrl,
+                            e
+                          )
+                        }
+                      />
+                    )}
+                  </Link>
+                </BentoTilt>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
+      <style jsx>{`
+        div[ref="sliderRef"]::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </section>
   );
 };

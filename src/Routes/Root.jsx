@@ -20,6 +20,8 @@ import PsOrder from "../Product_pages/PsOrder.jsx";
 import Story from "../Section/Story.jsx";
 import Cart from "../Components/cart.jsx";
 import Games from "../Section/Games.jsx";
+import GameOrder from "../Product_pages/GameOrder.jsx";
+import FreeeGames from "../Section/FreeGames.jsx";
 
 const Page_Component = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -58,6 +60,7 @@ const router = createBrowserRouter(
             <Feature />
             <Story />
             <Games />
+            <FreeeGames />
           </Page_Component>
         }
       />
@@ -80,6 +83,14 @@ const router = createBrowserRouter(
         element={
           <Page_Component>
             <PsOrder />
+          </Page_Component>
+        }
+      />
+      <Route
+        path="/game/:productId"
+        element={
+          <Page_Component>
+            <GameOrder />
           </Page_Component>
         }
       />

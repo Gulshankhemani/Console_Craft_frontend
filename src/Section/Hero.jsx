@@ -14,7 +14,6 @@ const Hero = ({ sectionTitle = "hero" }) => {
   const [videos, setVideos] = useState([]);
   const nextVideoRef = useRef(null);
 
-  // Predefined titles corresponding to the 6 videos
   const titles = [
     "Play Station",
     "Laptop",
