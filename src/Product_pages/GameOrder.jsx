@@ -12,6 +12,7 @@ const GameOrder = ({ sectioncategory = "Games" }) => {
   const [zoomStyle, setZoomStyle] = useState({ display: "none" });
   const [backgroundPosition, setBackgroundPosition] = useState("0% 0%");
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [paymentProcessing, setPaymentProcessing] = useState(false);
   const imageRef = useRef(null);
   const navigate = useNavigate();
 
@@ -21,6 +22,17 @@ const GameOrder = ({ sectioncategory = "Games" }) => {
     "/images/fallback-game3.jpg",
     "/images/fallback-game4.jpg",
   ];
+
+  useEffect(() => {
+    // Load Razorpay script
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -51,18 +63,18 @@ const GameOrder = ({ sectioncategory = "Games" }) => {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        console.log("Fetching product with ID:", productId); // Debug
+        console.log("Fetching product with ID:", productId);
         const response = await axios.get(
           `http://localhost:8000/api/v1/image/getImageById/${productId}`
         );
-        console.log("API Response:", response.data); // Debug
+        console.log("API Response:", response.data);
         const fetchedProduct = response.data.data;
         if (!fetchedProduct) {
           throw new Error("No product data returned");
         }
         setProduct({
           imageUrl: fetchedProduct.imageUrl || "/images/fallback-game.jpg",
-          // title: fetchedProduct.title || "Game Title",
+         
           price: fetchedProduct.price || 2999,
           rating: fetchedProduct.rating || 4.0,
           reviews: fetchedProduct.reviews || "50",
@@ -138,6 +150,102 @@ const GameOrder = ({ sectioncategory = "Games" }) => {
     }
   };
 
+  const handleBuyNow = async () => {
+    if (loading || !product || paymentProcessing) return;
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("Please log in to proceed with payment.");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      setPaymentProcessing(true);
+
+      // Step 1: Create a Razorpay order
+      const orderResponse = await axios.post(
+        "http://localhost:8000/api/v1/payment/create-order",
+        { amount: product.price },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      const { id: orderId, amount } = orderResponse.data.data;
+
+      // Step 2: Get user info for prefilling
+      const userEmail = localStorage.getItem("userEmail") || "";
+      const userPhone = localStorage.getItem("userPhone") || "";
+      const userName = localStorage.getItem("userName") || "";
+
+      // Step 3: Initialize Razorpay checkout
+      const options = {
+        key: "rzp_test_RhtYF7tlln3tsk",
+        amount: amount,
+        currency: "INR",
+        name: "Console - craft",
+        description: `Payment for ${product.title}`,
+        order_id: orderId,
+        handler: async function (response) {
+          try {
+            // Verify payment on server
+            const paymentData = {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            };
+
+            const verifyResponse = await axios.post(
+              "http://localhost:8000/api/v1/payment/verify-payment",
+              paymentData,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                },
+                withCredentials: true,
+              }
+            );
+
+            console.log("Payment Success:", verifyResponse.data);
+            alert("Payment successful! Order has been placed.");
+            navigate("/order-confirmation"); // Redirect to a confirmation page
+          } catch (err) {
+            console.error("Payment Verification Error:", err);
+            setError("Payment verification failed. Please contact support.");
+          } finally {
+            setPaymentProcessing(false);
+          }
+        },
+        prefill: {
+          name: userName,
+          email: userEmail,
+          contact: userPhone,
+        },
+        theme: {
+          color: "#3399cc",
+        },
+        modal: {
+          ondismiss: function () {
+            setPaymentProcessing(false);
+          },
+        },
+      };
+
+      const razorpayInstance = new window.Razorpay(options);
+      razorpayInstance.open();
+    } catch (err) {
+      console.error("Payment Error:", err.response || err.message);
+      setError(err.response?.data?.message || "Failed to process payment");
+      setPaymentProcessing(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex justify-center items-center">
@@ -163,7 +271,7 @@ const GameOrder = ({ sectioncategory = "Games" }) => {
               key={index}
               src={img}
               alt={`${product.title} preview ${index + 1}`}
-              className={`w-[170px] h-[138px] object-cover rounded-lg border border-gray-200 cursor-pointer ${
+              className={`w-[170px] h-[95px] object-cover rounded-lg border border-gray-200 cursor-pointer ${
                 selectedImageIndex === index ? "border-blue-75" : ""
               }`}
               onClick={() => setSelectedImageIndex(index)}
@@ -188,7 +296,7 @@ const GameOrder = ({ sectioncategory = "Games" }) => {
               style={{
                 ...zoomStyle,
                 width: "600px",
-                height: "600px",
+                height: "337px",
                 backgroundImage: `url(${previewImages[selectedImageIndex]})`,
                 backgroundSize: "200%",
                 backgroundPosition: backgroundPosition,
@@ -270,11 +378,13 @@ const GameOrder = ({ sectioncategory = "Games" }) => {
             name="Add to Cart"
             containerClass="w-full px-6 py-2 rounded-md mb-3 border border-gray-800 bg-blue-75 text-black"
             onClick={handleAddToCart}
+            disabled={loading || paymentProcessing}
           />
           <Button
-            name="Buy Now"
+            name={paymentProcessing ? "Processing..." : "Buy Now"}
             containerClass="w-full px-6 py-2 rounded-md border border-gray-800 bg-blue-75 text-black"
-            onClick={() => console.log("Buy Now clicked")}
+            onClick={handleBuyNow}
+            disabled={loading || paymentProcessing}
           />
         </div>
       </div>
@@ -292,7 +402,7 @@ const GameOrder = ({ sectioncategory = "Games" }) => {
               >
                 <img
                   src={image.imageUrl || "/images/fallback-game.jpg"}
-                  alt={image.title || `Related Game ${index + 1}`}
+                  alt={`Related Game ${index + 1}`}
                   className="w-full h-48 object-cover"
                   onError={(e) =>
                     console.error("Image failed to load:", image.imageUrl, e)
@@ -300,7 +410,7 @@ const GameOrder = ({ sectioncategory = "Games" }) => {
                 />
                 <div className="p-2 text-center">
                   <p className="text-sm font-medium text-blue-75">
-                    {image.title || `Related Game ${index + 1}`}
+                    { `Related Game ${index + 1}`}
                   </p>
                   <p className="text-xs text-yellow-500">
                     {"★".repeat(Math.round(image.rating || 4.0))}{" "}

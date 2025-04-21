@@ -37,6 +37,7 @@
     "react-use": "^17.6.0",
     "redux": "^5.0.1",
     "spine": "^1.6.2",
+    "sweetalert2": "^11.19.1",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.172.0",
     "tsparticles-engine": "^2.12.0",
