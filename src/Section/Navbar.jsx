@@ -16,6 +16,7 @@ const navItems = [
 const Navbar = () => {
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [isIndicatorActive, setIsIndicatorActive] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
 
   const audioElementRef = useRef(null);
   const navContainerRef = useRef(null);
@@ -26,7 +27,6 @@ const Navbar = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const isAuthenticated = !!localStorage.getItem("token");
 
   const isHomePage = location.pathname === "/";
 
@@ -35,25 +35,48 @@ const Navbar = () => {
     setIsIndicatorActive((prev) => !prev);
   };
 
+  useEffect(() => {
+    const checkAuth = () => {
+      const token = localStorage.getItem("token");
+      const refreshToken = localStorage.getItem("refreshToken");
+      console.log("Checking auth:", { token, refreshToken, isAuthenticated });
+      setIsAuthenticated(!!token);
+    };
 
-  // Function to refresh access token
+    checkAuth();
+    window.addEventListener("authChange", checkAuth);
+
+    return () => {
+      window.removeEventListener("authChange", checkAuth);
+    };
+  }, []);
+
   const refreshToken = async () => {
     try {
+      const storedRefreshToken = localStorage.getItem("refreshToken");
+      if (!storedRefreshToken) {
+        throw new Error("No refresh token found");
+      }
       const response = await axios.post(
         "http://localhost:8000/api/v1/users/refresh-token",
-        {},
-        { withCredentials: true } // Send refresh token via cookies
+        { refreshToken: storedRefreshToken },
+        { withCredentials: true }
       );
-      const { accessToken } = response.data.data;
-      localStorage.setItem("token", accessToken); // Update localStorage
+      const { accessToken, refreshToken: newRefreshToken } = response.data.data;
+      localStorage.setItem("token", accessToken);
+      localStorage.setItem("refreshToken", newRefreshToken);
+      setIsAuthenticated(true);
+      console.log("Token refreshed:", { accessToken, newRefreshToken });
       return accessToken;
     } catch (error) {
       console.error("Token refresh failed:", error);
+      localStorage.removeItem("token");
+      localStorage.removeItem("refreshToken");
+      setIsAuthenticated(false);
       throw error;
     }
   };
 
-  // Handle logout with token refresh fallback
   const handleSignout = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -69,12 +92,14 @@ const Navbar = () => {
       );
 
       localStorage.removeItem("token");
+      localStorage.removeItem("refreshToken");
+      setIsAuthenticated(false);
+      window.dispatchEvent(new Event("authChange"));
       navigate("/");
       console.log("Logout successful:", response.data);
     } catch (error) {
       console.error("Logout failed:", error.response?.data || error.message);
 
-      // If token is expired (401), try refreshing it
       if (error.response?.status === 401) {
         try {
           const newToken = await refreshToken();
@@ -89,12 +114,17 @@ const Navbar = () => {
             }
           );
           localStorage.removeItem("token");
+          localStorage.removeItem("refreshToken");
+          setIsAuthenticated(false);
+          window.dispatchEvent(new Event("authChange"));
           navigate("/");
           console.log("Logout successful after refresh:", retryResponse.data);
         } catch (refreshError) {
-          // If refresh fails, perform client-side logout
           console.error("Refresh failed, forcing client-side logout:", refreshError);
           localStorage.removeItem("token");
+          localStorage.removeItem("refreshToken");
+          setIsAuthenticated(false);
+          window.dispatchEvent(new Event("authChange"));
           navigate("/");
         }
       }
@@ -152,11 +182,11 @@ const Navbar = () => {
         <nav className="flex size-full items-center justify-between p-4">
           <div className="flex items-center gap-7">
             <img src="/img/logo.png" alt="logo" className="w-10" />
-            <Link to='/cart'>
-            <Button
-              name="Cart"
-              containerclass="bg-blue-50 md:flex hidden item-center justify-center gap-1 w-64"
-            />
+            <Link to="/cart">
+              <Button
+                name="Cart"
+                containerclass="bg-blue-50 md:flex hidden item-center justify-center gap-1 w-64"
+              />
             </Link>
           </div>
 

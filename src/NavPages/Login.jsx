@@ -11,7 +11,7 @@ const Login = () => {
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // New state for password visibility
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ const Login = () => {
   };
 
   const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev); // Toggle password visibility
+    setShowPassword((prev) => !prev);
   };
 
   const handleSubmit = async (event) => {
@@ -48,14 +48,21 @@ const Login = () => {
       );
       console.log("Login Response:", response.data);
 
-      // Store the token in localStorage
+      // Store the token and userId in localStorage
       const token = response.data.message.accessToken;
+      const userId = response.data.message.user?._id; // Adjust based on response structure
       if (token) {
         localStorage.setItem("token", token);
         console.log("Token stored in localStorage:", token);
       } else {
         console.error("No token found in response");
         setErrorMessage("Login successful, but no token received.");
+      }
+      if (userId) {
+        localStorage.setItem("userId", userId);
+        console.log("UserId stored in localStorage:", userId);
+      } else {
+        console.warn("No userId found in response");
       }
 
       navigate("/");
@@ -94,7 +101,7 @@ const Login = () => {
           </div>
           <div className="relative">
             <input
-              type={showPassword ? "text" : "password"} // Dynamically set type
+              type={showPassword ? "text" : "password"}
               onChange={handleChange}
               name="password"
               placeholder="Password"
@@ -104,9 +111,9 @@ const Login = () => {
             />
             <span
               className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white opacity-70 text-xl cursor-pointer"
-              onClick={togglePasswordVisibility} // Toggle on click
+              onClick={togglePasswordVisibility}
             >
-              {showPassword ? "👁️" : "👁️‍🗨️"} {/* Eye icon changes based on state */}
+              {showPassword ? "👁️" : "👁️‍🗨️"}
             </span>
           </div>
           <Button
@@ -140,8 +147,7 @@ const Login = () => {
               )
             }
             containerClass={`opacity-100 w-full text-white rounded-[10px] hover:scale-105 transform transition-transform duration-200 ease-in-out overflow-visible mt-8`}
-            onClick={handleSubmit} // Note: onClick is not strictly needed since form handles submission
-            // disabled={isLoading}
+            onClick={handleSubmit}
           />
         </form>
         <div className="mt-6 space-y-4 text-center">

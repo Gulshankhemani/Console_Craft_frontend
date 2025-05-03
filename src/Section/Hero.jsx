@@ -13,6 +13,7 @@ const Hero = ({ sectionTitle = "hero" }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [videos, setVideos] = useState([]);
   const nextVideoRef = useRef(null);
+  const mainVideoRef = useRef(null); // Added ref for main video
 
   const titles = [
     "Play Station",
@@ -50,6 +51,20 @@ const Hero = ({ sectionTitle = "hero" }) => {
 
     fetchVideos();
   }, [sectionTitle]);
+
+  // Added useEffect to handle video end and cycle to next video
+  useEffect(() => {
+    if (mainVideoRef.current) {
+      const handleVideoEnd = () => {
+        setCurrentIndex((prev) => (prev + 1) % videos.length); // Move to next video
+      };
+      const videoEl = mainVideoRef.current;
+      videoEl.addEventListener("ended", handleVideoEnd);
+      return () => {
+        videoEl.removeEventListener("ended", handleVideoEnd);
+      };
+    }
+  }, [videos, currentIndex]);
 
   const totalVideos = videos.length;
   const upcomingVideoIndex = (currentIndex + 1) % totalVideos || 0;
@@ -196,9 +211,10 @@ const Hero = ({ sectionTitle = "hero" }) => {
             }
           />
           <video
+            ref={mainVideoRef} // Added ref to main video
             src={videos[currentIndex]?.videoUrl}
             autoPlay
-            loop
+            loop={false} // Changed to false to allow 'ended' event
             muted
             playsInline
             className="absolute left-0 top-0 size-full object-cover object-center"
@@ -232,7 +248,7 @@ const Hero = ({ sectionTitle = "hero" }) => {
         </div>
       </div>
       <h1 className="special-font hero-heading absolute bottom-5 right-5 text-black">
-      {currentTitleParts.second}
+        {currentTitleParts.second}
       </h1>
     </div>
   );

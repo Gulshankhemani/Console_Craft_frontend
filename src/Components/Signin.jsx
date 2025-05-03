@@ -63,17 +63,25 @@ const Signin = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
+          withCredentials: true,
         }
       );
 
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
+      const token = response.data.data?.accessToken;
+      if (token) {
+        localStorage.setItem("token", token);
+        console.log("Token stored in localStorage:", token);
+      } else {
+        console.warn("No accessToken found in response:", response.data);
+        // Optionally proceed without token if cookies are sufficient
       }
 
-      navigate("/");
+      navigate("/"); // Always navigate on successful registration
     } catch (error) {
+      console.error("Error during registration:", error);
       setErrorMessage(
-        error.response?.data?.message || "Signup failed, please try again."
+        error.response?.data?.message ||
+          "An error occurred during registration. Please try again."
       );
     } finally {
       setIsLoading(false);
@@ -144,7 +152,7 @@ const Signin = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="Password (At least 6 characters)"
+              placeholder="Password (At least 8 characters)"
               className="w-full h-12 px-4 bg-transparent border border-white/30 rounded-xl focus:outline-none focus:border-white text-white placeholder-white/70"
               required
               disabled={isLoading}

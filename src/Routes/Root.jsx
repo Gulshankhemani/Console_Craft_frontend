@@ -22,6 +22,8 @@ import Cart from "../Components/cart.jsx";
 import Games from "../Section/Games.jsx";
 import GameOrder from "../Product_pages/GameOrder.jsx";
 import FreeeGames from "../Section/FreeGames.jsx";
+import Comment from "../Components/Comment.jsx"
+
 
 const Page_Component = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -70,6 +72,8 @@ const router = createBrowserRouter(
       <Route path="/deals" element={<Deals />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/comment" element={<Comment />} />
+
       <Route
         path="/playstation"
         element={

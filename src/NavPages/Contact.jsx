@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import Ghost from '/img/ghost.png'; // Update path based on actual location
+import { gsap } from 'gsap';
+import Button from '../Components/Button.jsx';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -39,31 +40,61 @@ const Contact = () => {
 
     if (res.success) {
       Swal.fire({
-        title: "Good job!",
+        title: "Success!",
         text: "Your message has been sent successfully",
-        icon: "success"
+        icon: "success",
+        confirmButtonColor: "#3b82f6"
       }).then(() => {
         navigate('/');
       });
     }
   };
 
+  useEffect(() => {
+    gsap.fromTo(
+      ".form-container",
+      { opacity: 0, scale: 0.9, rotateX: 10 },
+      { opacity: 1, scale: 1, rotateX: 0, duration: 1.2, ease: "power3.out" }
+    );
+    gsap.fromTo(
+      ".form-input",
+      { opacity: 0, y: 30, scale: 0.95 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.2, ease: "power2.out", delay: 0.4 }
+    );
+    gsap.fromTo(
+      ".form-label",
+      { opacity: 0, x: -20 },
+      { opacity: 1, x: 0, duration: 0.6, stagger: 0.2, ease: "power2.out", delay: 0.6 }
+    );
+    gsap.fromTo(
+      ".submit-btn",
+      { opacity: 0, y: 20, scale: 0.8 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: "elastic.out(1, 0.5)", delay: 1 }
+    );
+    gsap.fromTo(
+      ".title-underline",
+      { width: 0 },
+      { width: "4rem", duration: 0.8, ease: "power3.out", delay: 1.2 }
+    );
+  }, []);
+
   return (
-    <div
-      className="min-h-screen w-full bg-cover bg-center"
-      style={{ backgroundImage: `url(${Ghost})` }}
-    >
-     
-      <div className="max-w-xl mx-auto my-12 p-8 rounded-xl shadow-xl text-white text-center bg-black bg-opacity-50 animate-fade-in transition-transform">
-        <h1 className="text-3xl font-bold mb-6 animate-slide-down relative">
-          Get in touch
-          <span className="block w-16 h-1 bg-blue-500 mx-auto mt-2 rounded-full animate-slide-in" />
+    <div className="relative min-h-screen w-full flex items-center justify-center p-4">
+      <img
+        src="./img/ghost.png"
+        alt="background"
+        className="absolute inset-0 w-full h-full object-cover object-center"
+      />
+      <div className="form-container relative max-w-md w-full mx-auto p-8 rounded-2xl shadow-2xl bg-black bg-opacity-50 backdrop-blur-lg text-white z-10">
+        <h1 className="text-3xl font-extrabold mb-6 text-center text-blue-50 relative">
+          Get in Touch
+          <span className="title-underline block w-16 h-1 bg-blue-50 mx-auto mt-2 rounded-full" />
         </h1>
 
         <form onSubmit={onSubmit}>
-          <div className="mb-6 text-left animate-fade-up">
-            <label htmlFor="name" className="block font-semibold text-sm mb-2">
-              Name:
+          <div className="mb-5">
+            <label htmlFor="name" className="form-label block text-sm font-medium text-teal-100 mb-2">
+              Name
             </label>
             <input
               type="text"
@@ -72,13 +103,14 @@ const Contact = () => {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full p-3 text-black rounded-lg border border-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:scale-[1.02] transition"
+              className="form-input w-full p-3 rounded-lg border border-blue-50 bg-gray-800 text-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-50 focus:border-transparent transition-all duration-300 placeholder-blue-50 hover:bg-gray-700 hover:shadow-md"
+              placeholder="Your Name"
             />
           </div>
 
-          <div className="mb-6 text-left animate-fade-up">
-            <label htmlFor="email" className="block font-semibold text-sm mb-2">
-              Email:
+          <div className="mb-5">
+            <label htmlFor="email" className="form-label block text-sm font-medium text-teal-100 mb-2">
+              Email
             </label>
             <input
               type="email"
@@ -87,13 +119,14 @@ const Contact = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full p-3 text-black rounded-lg border border-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:scale-[1.02] transition"
+              className="form-input w-full p-3 rounded-lg border border-blue-50 bg-gray-800 text-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-50 focus:border-transparent transition-all duration-300 placeholder-blue-50 hover:bg-gray-700 hover:shadow-md"
+              placeholder="Your Email"
             />
           </div>
 
-          <div className="mb-6 text-left animate-fade-up">
-            <label htmlFor="message" className="block font-semibold text-sm mb-2">
-              Message:
+          <div className="mb-5">
+            <label htmlFor="message" className="form-label block text-sm font-medium text-blue-50 mb-2">
+              Message
             </label>
             <textarea
               id="message"
@@ -101,17 +134,16 @@ const Contact = () => {
               value={formData.message}
               onChange={handleChange}
               required
-              className="w-full p-3 text-black rounded-lg border border-white min-h-[120px] resize-y focus:outline-none focus:ring-2 focus:ring-blue-500 focus:scale-[1.02] transition"
+              className="form-input w-full p-3 rounded-lg border border-blue-50 bg-gray-800 text-blue-50 min-h-[120px] resize-y focus:outline-none focus:ring-2 focus:ring-blue-50 focus:border-transparent transition-all duration-300 placeholder-blue-50 hover:bg-gray-700 hover:shadow-md"
+              placeholder="Your Message"
             />
           </div>
 
-          <button
-            type="submit"
-            className="w-full py-3 text-lg font-bold text-white rounded-lg bg-gradient-to-br from-blue-500 to-blue-800 hover:from-blue-700 hover:to-blue-900 transform hover:-translate-y-1 transition shadow-lg relative overflow-hidden"
-          >
-            Send Message
-            <span className="absolute inset-0 bg-white bg-opacity-20 scale-0 group-hover:scale-100 transition-transform rounded-full duration-700"></span>
-          </button>
+          <Button
+            name="Send Message"
+            containerClass="submit-btn w-full text-lg"
+            onClick={() => {}}
+          />
         </form>
       </div>
     </div>
