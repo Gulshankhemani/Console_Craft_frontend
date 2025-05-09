@@ -92,7 +92,7 @@ const FreeeGames = ({ sectioncategory = "Games" }) => {
 
   const scrollLeft = () => {
     if (sliderRef.current) {
-      const cardWidth = 400; // Updated card width
+      const cardWidth = 400; 
       const gap = 32; // Tailwind's space-x-8 (8 * 4px = 32px)
       const scrollDistance = (cardWidth + gap) * 3; // Scroll by 3 cards
       sliderRef.current.scrollBy({ left: -scrollDistance, behavior: "smooth" });
@@ -104,9 +104,9 @@ const FreeeGames = ({ sectioncategory = "Games" }) => {
 
   const scrollRight = () => {
     if (sliderRef.current) {
-      const cardWidth = 400; // Updated card width
-      const gap = 32; // Tailwind's space-x-8 (8 * 4px = 32px)
-      const scrollDistance = (cardWidth + gap) * 3; // Scroll by 3 cards
+      const cardWidth = 400;
+      const gap = 32;
+      const scrollDistance = (cardWidth + gap) * 3; 
       sliderRef.current.scrollBy({ left: scrollDistance, behavior: "smooth" });
       console.log("Scrolling right by", scrollDistance);
     } else {

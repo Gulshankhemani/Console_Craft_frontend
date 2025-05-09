@@ -13,7 +13,7 @@ const Hero = ({ sectionTitle = "hero" }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [videos, setVideos] = useState([]);
   const nextVideoRef = useRef(null);
-  const mainVideoRef = useRef(null); // Added ref for main video
+  const mainVideoRef = useRef(null);
 
   const titles = [
     "Play Station",
@@ -34,10 +34,7 @@ const Hero = ({ sectionTitle = "hero" }) => {
             params: { title: sectionTitle, page: 1, limit: 6 },
           }
         );
-
-        console.log("API Response:", response.data);
         const fetchedVideos = response.data.data || [];
-        console.log("Fetched Videos:", fetchedVideos);
         setVideos(fetchedVideos);
       } catch (error) {
         console.error(
@@ -52,11 +49,10 @@ const Hero = ({ sectionTitle = "hero" }) => {
     fetchVideos();
   }, [sectionTitle]);
 
-  // Added useEffect to handle video end and cycle to next video
   useEffect(() => {
     if (mainVideoRef.current) {
       const handleVideoEnd = () => {
-        setCurrentIndex((prev) => (prev + 1) % videos.length); // Move to next video
+        setCurrentIndex((prev) => (prev + 1) % videos.length);
       };
       const videoEl = mainVideoRef.current;
       videoEl.addEventListener("ended", handleVideoEnd);
@@ -119,22 +115,18 @@ const Hero = ({ sectionTitle = "hero" }) => {
     });
   });
 
-  // Function to split and format the title
   const splitAndFormatTitle = (title) => {
     const words = title.split(" ");
-    let firstPart = "redefine"; // Default fallback
-    let secondPart = "Gaming";  // Default fallback
+    let firstPart = "redefine";
+    let secondPart = "Gaming";
 
     if (words.length > 1) {
-      // For multi-word titles, use first word and rest
-      firstPart = words[0];           // e.g., "Play"
-      secondPart = words.slice(1).join(" "); // e.g., "Station"
+      firstPart = words[0];
+      secondPart = words.slice(1).join(" ");
     } else {
-      // For single words, use the word as first part, keep "Gaming" as second
       firstPart = words[0];
     }
 
-    // Format a word by bolding 'a' and 'n'
     const formatWord = (word) =>
       word.split("").map((char, index) => {
         if (char.toLowerCase() === "a" || char.toLowerCase() === "n") {
@@ -149,7 +141,6 @@ const Hero = ({ sectionTitle = "hero" }) => {
     };
   };
 
-  // Get the formatted title parts for the current index
   const currentTitleParts = splitAndFormatTitle(titles[currentIndex] || "redefine Gaming");
 
   return (
@@ -172,12 +163,6 @@ const Hero = ({ sectionTitle = "hero" }) => {
                   muted
                   id="current-video"
                   className="size-64 origin-center scale-150 object-cover object-center"
-                  onCanPlay={() =>
-                    console.log(
-                      "Mini video ready to play:",
-                      videos[upcomingVideoIndex]?.videoUrl
-                    )
-                  }
                   onError={(e) =>
                     console.error(
                       "Mini video failed to load:",
@@ -196,12 +181,6 @@ const Hero = ({ sectionTitle = "hero" }) => {
             muted
             id="next-video"
             className="absolute-center invisible absolute z-20 size-64 object-cover object-center"
-            onCanPlay={() =>
-              console.log(
-                "Next video ready to play:",
-                videos[currentIndex]?.videoUrl
-              )
-            }
             onError={(e) =>
               console.error(
                 "Next video failed to load:",
@@ -211,19 +190,13 @@ const Hero = ({ sectionTitle = "hero" }) => {
             }
           />
           <video
-            ref={mainVideoRef} // Added ref to main video
+            ref={mainVideoRef}
             src={videos[currentIndex]?.videoUrl}
             autoPlay
-            loop={false} // Changed to false to allow 'ended' event
+            loop={false}
             muted
             playsInline
             className="absolute left-0 top-0 size-full object-cover object-center"
-            onCanPlay={() =>
-              console.log(
-                "Main video ready to play:",
-                videos[currentIndex]?.videoUrl
-              )
-            }
             onError={(e) =>
               console.error(
                 "Main video failed to load:",

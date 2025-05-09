@@ -46,23 +46,18 @@ const Login = () => {
           withCredentials: true,
         }
       );
-      console.log("Login Response:", response.data);
 
-      // Store the token and userId in localStorage
       const token = response.data.message.accessToken;
-      const userId = response.data.message.user?._id; // Adjust based on response structure
+      const userId = response.data.message.user?._id;
+
       if (token) {
         localStorage.setItem("token", token);
-        console.log("Token stored in localStorage:", token);
       } else {
-        console.error("No token found in response");
         setErrorMessage("Login successful, but no token received.");
       }
+
       if (userId) {
         localStorage.setItem("userId", userId);
-        console.log("UserId stored in localStorage:", userId);
-      } else {
-        console.warn("No userId found in response");
       }
 
       navigate("/");

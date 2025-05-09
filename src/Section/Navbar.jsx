@@ -17,6 +17,7 @@ const Navbar = () => {
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [isIndicatorActive, setIsIndicatorActive] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
+  const [userAvatar, setUserAvatar] = useState(null);
 
   const audioElementRef = useRef(null);
   const navContainerRef = useRef(null);
@@ -35,44 +36,84 @@ const Navbar = () => {
     setIsIndicatorActive((prev) => !prev);
   };
 
+  const fetchUserProfile = async (token) => {
+    try {
+      const response = await axios.get("http://localhost:8000/api/v1/users/current-user", {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      });
+      const avatarUrl = response.data.message.avatar; // ApiResponse: { data: user }
+      setUserAvatar(avatarUrl || "https://via.placeholder.com/32"); // Fallback like Comment.jsx
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.error("Failed to fetch user profile:", error);
+      if (error.response?.status === 401) {
+        try {
+          const newToken = await refreshToken();
+          const retryResponse = await axios.get("http://localhost:8000/api/v1/users/current-user", {
+            headers: { Authorization: `Bearer ${newToken}` },
+            withCredentials: true,
+          });
+          const avatarUrl = retryResponse.data.data.avatar;
+          setUserAvatar(avatarUrl || "https://via.placeholder.com/32");
+          setIsAuthenticated(true);
+        } catch (refreshError) {
+          console.error("Failed to refresh token:", refreshError);
+          setUserAvatar(null);
+          setIsAuthenticated(false);
+          localStorage.removeItem("token");
+          localStorage.removeItem("refreshToken");
+        }
+      } else {
+        setUserAvatar(null);
+        setIsAuthenticated(false);
+      }
+    }
+  };
+
   useEffect(() => {
-    const checkAuth = () => {
-      const token = localStorage.getItem("token");
-      const refreshToken = localStorage.getItem("refreshToken");
-      console.log("Checking auth:", { token, refreshToken, isAuthenticated });
-      setIsAuthenticated(!!token);
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetchUserProfile(token);
+    } else {
+      setUserAvatar(null);
+      setIsAuthenticated(false);
+    }
+
+    const handleAuthChange = () => {
+      const newToken = localStorage.getItem("token");
+      if (newToken) {
+        fetchUserProfile(newToken);
+      } else {
+        setUserAvatar(null);
+        setIsAuthenticated(false);
+      }
     };
 
-    checkAuth();
-    window.addEventListener("authChange", checkAuth);
+    window.addEventListener("authChange", handleAuthChange);
 
     return () => {
-      window.removeEventListener("authChange", checkAuth);
+      window.removeEventListener("authChange", handleAuthChange);
     };
-  }, []);
+  }, []); // Run once on mount
 
   const refreshToken = async () => {
     try {
       const storedRefreshToken = localStorage.getItem("refreshToken");
-      if (!storedRefreshToken) {
-        throw new Error("No refresh token found");
-      }
+      if (!storedRefreshToken) throw new Error("No refresh token found");
+
       const response = await axios.post(
         "http://localhost:8000/api/v1/users/refresh-token",
         { refreshToken: storedRefreshToken },
         { withCredentials: true }
       );
+
       const { accessToken, refreshToken: newRefreshToken } = response.data.data;
       localStorage.setItem("token", accessToken);
       localStorage.setItem("refreshToken", newRefreshToken);
-      setIsAuthenticated(true);
-      console.log("Token refreshed:", { accessToken, newRefreshToken });
       return accessToken;
     } catch (error) {
       console.error("Token refresh failed:", error);
-      localStorage.removeItem("token");
-      localStorage.removeItem("refreshToken");
-      setIsAuthenticated(false);
       throw error;
     }
   };
@@ -80,50 +121,48 @@ const Navbar = () => {
   const handleSignout = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post(
+      await axios.post(
         "http://localhost:8000/api/v1/users/logout",
         {},
         {
           withCredentials: true,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
       localStorage.removeItem("token");
       localStorage.removeItem("refreshToken");
       setIsAuthenticated(false);
+      setUserAvatar(null);
       window.dispatchEvent(new Event("authChange"));
       navigate("/");
-      console.log("Logout successful:", response.data);
     } catch (error) {
       console.error("Logout failed:", error.response?.data || error.message);
 
       if (error.response?.status === 401) {
         try {
           const newToken = await refreshToken();
-          const retryResponse = await axios.post(
+          await axios.post(
             "http://localhost:8000/api/v1/users/logout",
             {},
             {
               withCredentials: true,
-              headers: {
-                Authorization: `Bearer ${newToken}`,
-              },
+              headers: { Authorization: `Bearer ${newToken}` },
             }
           );
+
           localStorage.removeItem("token");
           localStorage.removeItem("refreshToken");
           setIsAuthenticated(false);
+          setUserAvatar(null);
           window.dispatchEvent(new Event("authChange"));
           navigate("/");
-          console.log("Logout successful after refresh:", retryResponse.data);
         } catch (refreshError) {
           console.error("Refresh failed, forcing client-side logout:", refreshError);
           localStorage.removeItem("token");
           localStorage.removeItem("refreshToken");
           setIsAuthenticated(false);
+          setUserAvatar(null);
           window.dispatchEvent(new Event("authChange"));
           navigate("/");
         }
@@ -181,7 +220,11 @@ const Navbar = () => {
       <header className="absolute top-1/2 w-full -translate-y-1/2">
         <nav className="flex size-full items-center justify-between p-4">
           <div className="flex items-center gap-7">
-            <img src="/img/logo.png" alt="logo" className="w-10" />
+            <img
+              src={isAuthenticated && userAvatar ? userAvatar : "/img/logo.png"}
+              alt={isAuthenticated && userAvatar ? "User Avatar" : "Logo"}
+              className="w-10 h-10 rounded-full object-cover"
+            />
             <Link to="/cart">
               <Button
                 name="Cart"
@@ -218,15 +261,13 @@ const Navbar = () => {
                 src="/audio/loop.mp3"
                 loop
               />
-              {[1, 2, 3, 4].map((bar) => (
+              {[1, 2, 3, 3].map((bar) => (
                 <div
                   key={bar}
                   className={clsx("indicator-line", {
                     active: isIndicatorActive,
                   })}
-                  style={{
-                    animationDelay: `${bar * 0.1}s`,
-                  }}
+                  style={{ animationDelay: `${bar * 0.1}s` }}
                 />
               ))}
             </button>
