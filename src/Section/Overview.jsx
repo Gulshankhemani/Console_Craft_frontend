@@ -18,7 +18,7 @@ const Overview = ({ sectioncategory = "PC_Components" }) => {
       try {
         setIsLoading(true);
         const response = await axios.get(
-          "http://localhost:8000/api/v1/image/getImageByCategory",
+         `${import.meta.env.VITE_API_BASE_URL}/api/v1/image/getImageByCategory`,
           {
             params: { category: sectioncategory, page: 1, limit: 6 },
           }

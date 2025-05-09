@@ -102,7 +102,7 @@ const Features = () => {
       try {
         setIsLoading(true);
         const response = await axios.get(
-          "http://localhost:8000/api/v1/videos/getVideoByTitle",
+         `${import.meta.env.VITE_API_BASE_URL}/api/v1/videos/getVideoByTitle`,
           {
             params: { title: "feature", page: 1, limit: 6 },
           }

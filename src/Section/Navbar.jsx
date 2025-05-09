@@ -38,7 +38,7 @@ const Navbar = () => {
 
   const fetchUserProfile = async (token) => {
     try {
-      const response = await axios.get("http://localhost:8000/api/v1/users/current-user", {
+      const response = await axios.get( `${import.meta.env.VITE_API_BASE_URL}/api/v1/users/current-user`, {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
@@ -50,7 +50,7 @@ const Navbar = () => {
       if (error.response?.status === 401) {
         try {
           const newToken = await refreshToken();
-          const retryResponse = await axios.get("http://localhost:8000/api/v1/users/current-user", {
+          const retryResponse = await axios.get( `${import.meta.env.VITE_API_BASE_URL}/api/v1/users/current-user`, {
             headers: { Authorization: `Bearer ${newToken}` },
             withCredentials: true,
           });
@@ -103,7 +103,7 @@ const Navbar = () => {
       if (!storedRefreshToken) throw new Error("No refresh token found");
 
       const response = await axios.post(
-        "http://localhost:8000/api/v1/users/refresh-token",
+        `${import.meta.env.VITE_API_BASE_URL}/api/v1/users/refresh-token`,
         { refreshToken: storedRefreshToken },
         { withCredentials: true }
       );
@@ -122,7 +122,7 @@ const Navbar = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        "http://localhost:8000/api/v1/users/logout",
+        `${import.meta.env.VITE_API_BASE_URL}/api/v1/users/logout`,
         {},
         {
           withCredentials: true,
@@ -143,7 +143,7 @@ const Navbar = () => {
         try {
           const newToken = await refreshToken();
           await axios.post(
-            "http://localhost:8000/api/v1/users/logout",
+           `${import.meta.env.VITE_API_BASE_URL}/api/v1/users/logout`,
             {},
             {
               withCredentials: true,

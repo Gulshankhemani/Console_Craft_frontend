@@ -27,7 +27,7 @@ const PsOrder = ({ sectioncategory = "PlayStation" }) => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "http://localhost:8000/api/v1/image/getImageByCategory",
+          `${import.meta.env.VITE_API_BASE_URL}/api/v1/image/getImageByCategory`,
           {
             params: { category: sectioncategory, page: 1, limit: 14 },
           }
@@ -53,7 +53,7 @@ const PsOrder = ({ sectioncategory = "PlayStation" }) => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:8000/api/v1/image/getImageById/${productId}`
+          `${import.meta.env.VITE_API_BASE_URL}/api/v1/image/getImageById/${productId}`
         );
         const fetchedProduct = response.data.data;
         setProduct({
@@ -109,7 +109,7 @@ const PsOrder = ({ sectioncategory = "PlayStation" }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/cart",
+        `${import.meta.env.VITE_API_BASE_URL}/api/v1/cart`,
         {
           productId: productId,
           quantity: 1,

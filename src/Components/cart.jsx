@@ -44,7 +44,7 @@ const Cart = () => {
 
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:8000/api/v1/cart", {
+      const response = await axios.get( `${import.meta.env.VITE_API_BASE_URL}/api/v1/cart`, {
         headers: {
           Authorization: `Bearer ${token}`, // Fixed string interpolation
         },
@@ -76,7 +76,7 @@ const Cart = () => {
     try {
       setLoading(true);
       const response = await axios.delete(
-        `http://localhost:8000/api/v1/cart/${productId}`, // Fixed string interpolation
+        `${import.meta.env.VITE_API_BASE_URL}/api/v1/cart/${productId}`, // Fixed string interpolation
         {
           headers: {
             Authorization: `Bearer ${token}`, // Fixed string interpolation
@@ -115,11 +115,11 @@ const Cart = () => {
 
       // Step 1: Create a Razorpay order
       const orderResponse = await axios.post(
-        "http://localhost:8000/api/v1/payment/create-order",
-        { amount: cart.totalAmount || 21998 }, // Default amount for testing
+        `${import.meta.env.VITE_API_BASE_URL}/api/v1/payment/create-order`,
+        { amount: cart.totalAmount  }, 
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Fixed string interpolation
+            Authorization: `Bearer ${token}`, 
           },
           withCredentials: true,
         }
@@ -151,7 +151,7 @@ const Cart = () => {
             };
 
             const verifyResponse = await axios.post(
-              "http://localhost:8000/api/v1/payment/verify-payment",
+              `${import.meta.env.VITE_API_BASE_URL}/api/v1/payment/verify-payment`,
               paymentData,
               {
                 headers: {

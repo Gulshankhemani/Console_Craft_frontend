@@ -15,7 +15,7 @@ const Comment = () => {
           throw new Error("No access token found. Please log in.");
         }
         console.log("Fetching comments with token:", token); // Debug log
-        const response = await axios.get("http://localhost:8000/api/v1/comments", {
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/v1/comments`, {
           params: { page: 1, limit: 10 },
           headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
         });
@@ -39,7 +39,7 @@ const Comment = () => {
       }
       console.log("Posting comment:", { content, parentCommentId, token });
       const response = await axios.post(
-        "http://localhost:8000/api/v1/comments/comment",
+        `${import.meta.env.VITE_API_BASE_URL}/api/v1/comments/comment`,
         { content, parentCommentId },
         { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
       );
@@ -127,7 +127,7 @@ const CommentItem = React.memo(({ comment, setComments, depth = 0 }) => {
       }
       console.log("Posting reply:", { content, parentCommentId, token });
       const response = await axios.post(
-        "http://localhost:8000/api/v1/comments/comment",
+        `${import.meta.env.VITE_API_BASE_URL}/api/v1/comments/comment`,
         { content, parentCommentId },
         { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
       );
@@ -159,7 +159,7 @@ const CommentItem = React.memo(({ comment, setComments, depth = 0 }) => {
         throw new Error("No access token found. Please log in.");
       }
       const response = await axios.put(
-        `http://localhost:8000/api/v1/comments/comment/${comment._id}`,
+       `${import.meta.env.VITE_API_BASE_URL}/api/v1/comments/comment/${comment._id}`,
         { content: editContent },
         { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
       );
@@ -191,7 +191,7 @@ const CommentItem = React.memo(({ comment, setComments, depth = 0 }) => {
         throw new Error("No access token found. Please log in.");
       }
       await axios.delete(
-        `http://localhost:8000/api/v1/comments/comment/${comment._id}`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/v1/comments/comment/${comment._id}`,
         { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
       );
       setComments((prev) => {

@@ -39,7 +39,7 @@ const GameOrder = ({ sectioncategory = "Games" }) => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "http://localhost:8000/api/v1/image/getImageByCategory",
+          `${import.meta.env.VITE_API_BASE_URL}/api/v1/image/getImageByCategory`,
           {
             params: { category: sectioncategory, page: 1, limit: 14 },
           }
@@ -65,7 +65,7 @@ const GameOrder = ({ sectioncategory = "Games" }) => {
         setLoading(true);
         console.log("Fetching product with ID:", productId);
         const response = await axios.get(
-          `http://localhost:8000/api/v1/image/getImageById/${productId}`
+           `${import.meta.env.VITE_API_BASE_URL}/api/v1/image/getImageById/${productId}`
         );
         console.log("API Response:", response.data);
         const fetchedProduct = response.data.data;
@@ -127,7 +127,7 @@ const GameOrder = ({ sectioncategory = "Games" }) => {
     }
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/cart",
+        `${import.meta.env.VITE_API_BASE_URL}/api/v1/cart`,
         {
           productId: productId,
           quantity: 1,
@@ -165,7 +165,7 @@ const GameOrder = ({ sectioncategory = "Games" }) => {
 
       // Step 1: Create a Razorpay order
       const orderResponse = await axios.post(
-        "http://localhost:8000/api/v1/payment/create-order",
+       `${import.meta.env.VITE_API_BASE_URL}/api/v1/payment/create-order`,
         { amount: product.price },
         {
           headers: {
@@ -201,7 +201,7 @@ const GameOrder = ({ sectioncategory = "Games" }) => {
             };
 
             const verifyResponse = await axios.post(
-              "http://localhost:8000/api/v1/payment/verify-payment",
+              `${import.meta.env.VITE_API_BASE_URL}/api/v1/payment/verify-payment`,
               paymentData,
               {
                 headers: {
